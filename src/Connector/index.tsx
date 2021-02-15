@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 interface Props {
   el1: HTMLDivElement;
@@ -10,14 +10,17 @@ interface Props {
 }
 
 export default function Connector(props: Props) {
+  const wrapperRef = useRef<HTMLDivElement | null>(null);
+
   function getCoords(el: HTMLElement) {
+    const parentEl = el.offsetParent;
     const box = el.getBoundingClientRect();
 
     return {
-      top: box.top + window.pageYOffset,
-      right: box.right + window.pageXOffset,
-      bottom: box.bottom + window.pageYOffset,
-      left: box.left + window.pageXOffset,
+      top: box.top + window.pageYOffset + (parentEl?.scrollTop || 0),
+      right: box.right + window.pageXOffset + (parentEl?.scrollLeft || 0),
+      bottom: box.bottom + window.pageYOffset + (parentEl?.scrollTop || 0),
+      left: box.left + window.pageXOffset + (parentEl?.scrollLeft || 0),
     };
   }
 
@@ -40,11 +43,12 @@ export default function Connector(props: Props) {
 
   return (
     <div
+      ref={wrapperRef}
       style={{
         position: "absolute",
         top: 0,
         width: "100%",
-        height: document.documentElement.scrollHeight,
+        height: wrapperRef.current?.offsetParent?.scrollHeight || "100%",
         zIndex: -1,
       }}
     >

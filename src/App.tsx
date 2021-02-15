@@ -6,6 +6,7 @@ import Connector from "./Connector";
 const Wrapper = styled.div`
   position: relative;
   height: 100vh;
+  overflow: scroll;
 `;
 
 const Box = styled.div`

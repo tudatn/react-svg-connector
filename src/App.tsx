@@ -23,6 +23,10 @@ const Box2 = styled(Box)`
   background-color: red;
 `;
 
+const Box3 = styled(Box)`
+  background-color: blue;
+`;
+
 function App() {
   const [activeDrags, setActiveDrags] = useState(0);
   const [redraw, setRedraw] = useState(0);
@@ -64,12 +68,30 @@ function App() {
         el2={refs.current["box2"]?.current}
         shape="narrow-s"
       />
+      <Connector
+        el1={refs.current["box1"]?.current}
+        el2={refs.current["box3"]?.current}
+        shape="narrow-s"
+      />
       <Draggable onStart={onStart} onStop={onStop} onDrag={onDrag}>
         <Box1 ref={addRef("box1")} />
       </Draggable>
       <Draggable onStart={onStart} onStop={onStop} onDrag={onDrag}>
         <Box2 ref={addRef("box2")} />
       </Draggable>
+      <div
+        style={{
+          position: "relative",
+          height: "400px",
+          width: "600px",
+          overflow: "scroll",
+          border: "1px solid black",
+        }}
+      >
+        <Draggable onStart={onStart} onStop={onStop} onDrag={onDrag}>
+          <Box3 ref={addRef("box3")} />
+        </Draggable>
+      </div>
     </Wrapper>
   );
 }

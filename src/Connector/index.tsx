@@ -61,7 +61,7 @@ export default function Connector(props: Props) {
       style={{
         position: "absolute",
         top: 0,
-        width: "100%",
+        width: wrapperRef.current?.offsetParent?.scrollWidth || "100%",
         height: wrapperRef.current?.offsetParent?.scrollHeight || "100%",
         zIndex: -1,
       }}

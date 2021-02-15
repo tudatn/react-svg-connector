@@ -10,55 +10,33 @@ interface Props {
 }
 
 export default function Connector(props: Props) {
-  const [coordinates, setCoordinates] = useState({
-    startX: 0,
-    startY: 0,
-    endX: 0,
-    endY: 0,
-  });
+  function getCoords(el: HTMLElement) {
+    const box = el.getBoundingClientRect();
 
-  useEffect(() => {
-    function getCoords(el: HTMLElement) {
-      const box = el.getBoundingClientRect();
-
-      return {
-        top: box.top + window.pageYOffset,
-        right: box.right + window.pageXOffset,
-        bottom: box.bottom + window.pageYOffset,
-        left: box.left + window.pageXOffset,
-      };
-    }
-
-    function getNewCoordinates() {
-      const startX = getCoords(props.el1).right;
-      const startY =
-        getCoords(props.el1).top +
-        (getCoords(props.el1).bottom - getCoords(props.el1).top) / 2;
-
-      const endX = getCoords(props.el2).left;
-      const endY =
-        getCoords(props.el2).top +
-        (getCoords(props.el2).bottom - getCoords(props.el2).top) / 2;
-      return { startX, startY, endX, endY };
-    }
-
-    function redraw() {
-      setCoordinates(getNewCoordinates());
-    }
-
-    function cleanup() {
-      window.removeEventListener("scroll", redraw);
-      window.removeEventListener("resize", redraw);
-    }
-
-    window.addEventListener("scroll", redraw);
-    window.addEventListener("resize", redraw);
-    return () => {
-      cleanup();
+    return {
+      top: box.top + window.pageYOffset,
+      right: box.right + window.pageXOffset,
+      bottom: box.bottom + window.pageYOffset,
+      left: box.left + window.pageXOffset,
     };
-  }, []);
+  }
+
+  function getNewCoordinates() {
+    const startX = getCoords(props.el1).right;
+    const startY =
+      getCoords(props.el1).top +
+      (getCoords(props.el1).bottom - getCoords(props.el1).top) / 2;
+
+    const endX = getCoords(props.el2).left;
+    const endY =
+      getCoords(props.el2).top +
+      (getCoords(props.el2).bottom - getCoords(props.el2).top) / 2;
+    return { startX, startY, endX, endY };
+  }
 
   if (!props.el1 || !props.el2) return null;
+
+  const coordinates = getNewCoordinates();
 
   return (
     <div
@@ -164,24 +142,32 @@ interface NarrowSConnectorProps extends ShapeConnectorProps {
 
 export function NarrowSConnector(props: NarrowSConnectorProps) {
   const distanceX = props.endX - props.startX;
+  const distanceY = props.endY - props.startY;
+
+  const multiplier = distanceX * distanceY;
+  const directionFactor = multiplier !== 0 ? (multiplier > 0 ? 1 : -1) : 0;
+
   let stem = props.stem || 0;
   const grids = props.grids || 5;
   if (stem >= grids - 1) {
     stem = grids - 2;
   }
   const stepX = distanceX / grids;
+  const stepY = distanceY / grids;
+
+  const step = stepX;
 
   return (
     <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
       <path
         d={`M
             ${props.startX} ${props.startY} 
-            h ${stepX * stem} 
-            q ${stepX} 0 
-            ${stepX} ${stepX}
-            V ${props.endY - stepX}
-            q ${0} ${stepX}
-            ${stepX} ${stepX}
+            h ${Math.abs(step) * stem} 
+            q ${Math.abs(step)} 0 
+            ${Math.abs(step)} ${step * directionFactor}
+            V ${props.endY - step * directionFactor}
+            q ${0} ${step * directionFactor}
+            ${step} ${step * directionFactor}
             H ${props.endX}
             `}
         stroke={props.stroke || "orange"}

@@ -49,6 +49,10 @@ function App() {
     setActiveDrags(newActiveDrags);
   }
 
+  function onDrag(e: any, data: any) {
+    setRedraw(Math.random());
+  }
+
   useEffect(() => {
     setRedraw(Math.random());
   }, []);
@@ -60,10 +64,10 @@ function App() {
         el2={refs.current["box2"]?.current}
         shape="narrow-s"
       />
-      <Draggable onStart={onStart} onStop={onStop}>
+      <Draggable onStart={onStart} onStop={onStop} onDrag={onDrag}>
         <Box1 ref={addRef("box1")} />
       </Draggable>
-      <Draggable onStart={onStart} onStop={onStop}>
+      <Draggable onStart={onStart} onStop={onStop} onDrag={onDrag}>
         <Box2 ref={addRef("box2")} />
       </Draggable>
     </Wrapper>

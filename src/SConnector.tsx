@@ -1,5 +1,5 @@
 import React from "react";
-import { ShapeConnectorProps } from ".";
+import { ShapeConnectorProps } from "./SvgConnector";
 
 interface SConectorProps extends ShapeConnectorProps {}
 

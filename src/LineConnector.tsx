@@ -1,5 +1,5 @@
 import React from "react";
-import { ShapeConnectorProps } from ".";
+import { ShapeConnectorProps } from "./SvgConnector";
 
 interface LineConnectorProps extends ShapeConnectorProps {}
 
@@ -12,7 +12,7 @@ export default function LineConnector(props: LineConnectorProps) {
         y1={props.startY}
         y2={props.endY}
         stroke={props.stroke || "orange"}
-        stroke-width={props.strokeWidth || 3}
+        strokeWidth={props.strokeWidth || 3}
       />
     </svg>
   );

@@ -1,48 +1,41 @@
 {
   "name": "react-svg-connector",
-  "version": "0.1.0",
-  "private": true,
+  "version": "1.0.0",
+  "description": "React component to draw svg connectors between any React components",
+  "main": "lib/index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "files": [
+    "lib"
+  ],
   "dependencies": {
-    "@testing-library/jest-dom": "^5.11.4",
-    "@testing-library/react": "^11.1.0",
-    "@testing-library/user-event": "^12.1.10",
-    "@types/jest": "^26.0.15",
+    "react": ">=16.8.0",
+    "react-dom": ">=16.8.0"
+  },
+  "devDependencies": {
     "@types/node": "^12.0.0",
     "@types/react": "^17.0.0",
     "@types/react-dom": "^17.0.0",
-    "react": "^17.0.1",
-    "react-dom": "^17.0.1",
-    "react-draggable": "^4.4.3",
-    "react-scripts": "4.0.2",
-    "styled-components": "^5.2.1",
-    "typescript": "^4.1.2",
-    "web-vitals": "^1.0.1"
+    "typescript": "^4.1.2"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "clean": "rm -rf ./lib",
+    "prebuild": "yarn clean",
+    "build": "tsc --build \"./tsconfig.json\""
   },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tudatn/react-svg-connector.git"
   },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+  "keywords": [
+    "React",
+    "svg"
+  ],
+  "author": "Tu Dat Nguyen",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/tudatn/react-svg-connector/issues"
   },
-  "devDependencies": {
-    "@types/styled-components": "^5.1.7"
-  }
+  "homepage": "https://github.com/tudatn/react-svg-connector#readme"
 }

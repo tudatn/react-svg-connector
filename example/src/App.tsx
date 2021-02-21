@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import Draggable from "react-draggable";
 import styled from "styled-components/macro";
-import Connector from "./Connector";
+import { Connector } from "react-svg-connector";
 
 const Wrapper = styled.div`
   position: relative;
@@ -21,10 +21,6 @@ const Box1 = styled(Box)`
 
 const Box2 = styled(Box)`
   background-color: red;
-`;
-
-const Box3 = styled(Box)`
-  background-color: blue;
 `;
 
 function App() {
@@ -63,27 +59,6 @@ function App() {
 
   return (
     <Wrapper>
-      <Connector
-        el1={refs.current["box1"]?.current}
-        el2={refs.current["box2"]?.current}
-        shape="narrow-s"
-        direction="r2r"
-        stroke="red"
-      />
-      <Connector
-        el1={refs.current["box1"]?.current}
-        el2={refs.current["box2"]?.current}
-        shape="narrow-s"
-        direction="l2r"
-        stroke="green"
-      />
-      <Connector
-        el1={refs.current["box1"]?.current}
-        el2={refs.current["box2"]?.current}
-        shape="narrow-s"
-        direction="l2l"
-        stroke="blue"
-      />
       <Connector
         el1={refs.current["box1"]?.current}
         el2={refs.current["box2"]?.current}

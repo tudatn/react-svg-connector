@@ -1,6 +1,6 @@
 import React from "react";
 
-import { ShapeConnectorProps, ShapeDirection } from ".";
+import { ShapeConnectorProps, ShapeDirection } from "./SvgConnector";
 
 interface NarrowSConnectorProps extends ShapeConnectorProps {
   grids?: number;

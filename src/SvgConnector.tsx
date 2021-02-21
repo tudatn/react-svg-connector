@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef } from "react";
 import NarrowSConnector from "./NarrowSConnector";
 import LineConnector from "./LineConnector";
 import SConnector from "./SConnector";
@@ -26,7 +26,7 @@ export interface ShapeConnectorProps {
   strokeWidth?: number;
 }
 
-export default function Connector(props: Props) {
+export default function SvgConnector(props: Props) {
   const wrapperRef = useRef<HTMLDivElement | null>(null);
 
   function getCoords(el: HTMLElement) {

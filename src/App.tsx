@@ -6,7 +6,7 @@ import Connector from "./Connector";
 const Wrapper = styled.div`
   position: relative;
   height: 100vh;
-  overflow: scroll;
+  overflow: auto;
 `;
 
 const Box = styled.div`
@@ -67,31 +67,36 @@ function App() {
         el1={refs.current["box1"]?.current}
         el2={refs.current["box2"]?.current}
         shape="narrow-s"
+        direction="r2r"
+        stroke="red"
       />
       <Connector
         el1={refs.current["box1"]?.current}
-        el2={refs.current["box3"]?.current}
+        el2={refs.current["box2"]?.current}
         shape="narrow-s"
+        direction="l2r"
+        stroke="green"
       />
+      <Connector
+        el1={refs.current["box1"]?.current}
+        el2={refs.current["box2"]?.current}
+        shape="narrow-s"
+        direction="l2l"
+        stroke="blue"
+      />
+      <Connector
+        el1={refs.current["box1"]?.current}
+        el2={refs.current["box2"]?.current}
+        shape="narrow-s"
+        direction="r2l"
+      />
+
       <Draggable onStart={onStart} onStop={onStop} onDrag={onDrag}>
         <Box1 ref={addRef("box1")} />
       </Draggable>
       <Draggable onStart={onStart} onStop={onStop} onDrag={onDrag}>
         <Box2 ref={addRef("box2")} />
       </Draggable>
-      <div
-        style={{
-          position: "relative",
-          height: "400px",
-          width: "600px",
-          overflow: "scroll",
-          border: "1px solid black",
-        }}
-      >
-        <Draggable onStart={onStart} onStop={onStop} onDrag={onDrag}>
-          <Box3 ref={addRef("box3")} />
-        </Draggable>
-      </div>
     </Wrapper>
   );
 }

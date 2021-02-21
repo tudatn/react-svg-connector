@@ -3,10 +3,13 @@ import NarrowSConnector from "./NarrowSConnector";
 import LineConnector from "./LineConnector";
 import SConnector from "./SConnector";
 
+export type ShapeDirection = "r2l" | "l2r" | "l2l" | "r2r";
+
 interface Props {
   el1: HTMLDivElement;
   el2: HTMLDivElement;
   shape: "s" | "line" | "narrow-s";
+  direction?: ShapeDirection;
   grids?: number;
   stem?: number;
   radius?: number;
@@ -39,15 +42,32 @@ export default function Connector(props: Props) {
   }
 
   function getNewCoordinates() {
-    const startX = getCoords(props.el1).right;
-    const startY =
+    let startX = getCoords(props.el1).right;
+    let startY =
       getCoords(props.el1).top +
       (getCoords(props.el1).bottom - getCoords(props.el1).top) / 2;
 
-    const endX = getCoords(props.el2).left;
-    const endY =
+    let endX = getCoords(props.el2).left;
+    let endY =
       getCoords(props.el2).top +
       (getCoords(props.el2).bottom - getCoords(props.el2).top) / 2;
+
+    switch (props.direction) {
+      case "l2l":
+        startX = getCoords(props.el1).left;
+        break;
+      case "l2r":
+        startX = getCoords(props.el1).left;
+        endX = getCoords(props.el2).right;
+        break;
+      case "r2r":
+        startX = getCoords(props.el1).right;
+        endX = getCoords(props.el2).right;
+        break;
+      default:
+        break;
+    }
+
     return { startX, startY, endX, endY };
   }
 
@@ -97,6 +117,7 @@ export default function Connector(props: Props) {
           stroke={props.stroke}
           strokeWidth={props.strokeWidth}
           radius={props.radius}
+          direction={props.direction}
         />
       )}
     </div>

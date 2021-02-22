@@ -64,6 +64,7 @@ function App() {
         el2={refs.current["box2"]?.current}
         shape="narrow-s"
         direction="r2l"
+        roundCorner={true}
       />
 
       <Draggable onStart={onStart} onStop={onStop} onDrag={onDrag}>

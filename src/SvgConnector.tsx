@@ -12,7 +12,7 @@ interface Props {
   direction?: ShapeDirection;
   grids?: number;
   stem?: number;
-  radius?: number;
+  roundCorner?: boolean;
   stroke?: string;
   strokeWidth?: number;
 }
@@ -116,7 +116,7 @@ export default function SvgConnector(props: Props) {
           grids={props.grids}
           stroke={props.stroke}
           strokeWidth={props.strokeWidth}
-          radius={props.radius}
+          roundCorner={props.roundCorner}
           direction={props.direction}
         />
       )}

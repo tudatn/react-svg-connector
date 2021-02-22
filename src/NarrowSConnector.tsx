@@ -5,8 +5,9 @@ import { ShapeConnectorProps, ShapeDirection } from "./SvgConnector";
 interface NarrowSConnectorProps extends ShapeConnectorProps {
   grids?: number;
   stem?: number;
-  radius?: number;
+  roundCorner?: boolean;
   direction?: ShapeDirection;
+  minStep?: number;
 }
 
 export default function NarrowSConnector(props: NarrowSConnectorProps) {
@@ -35,46 +36,54 @@ export default function NarrowSConnector(props: NarrowSConnectorProps) {
   if (stem >= grids - 1) {
     stem = grids - 2;
   }
+
+  const radius = props.roundCorner ? 1 : 0;
+
   const stepX = distanceX / grids;
   const stepY = distanceY / grids;
 
-  const step = Math.min(Math.abs(stepX), Math.abs(stepY));
+  let step = Math.min(Math.abs(stepX), Math.abs(stepY));
+
+  step = Math.max(step, props.minStep || 5);
 
   function corner12(direction?: ShapeDirection) {
     const factor = distanceX * distanceY >= 0 ? 1 : -1;
 
     let pathr2l = `M
-                  ${coordinates.startX} ${coordinates.startY} 
-                  h ${step * stem} 
-                  q ${step} 0 
-                  ${step} ${step * factor}
-                  V ${coordinates.endY - step * factor}
-                  q ${0} ${step * factor}
-                  ${step} ${step * factor}
-                  H ${coordinates.endX}
+                    ${coordinates.startX} ${coordinates.startY} 
+                    h ${step * stem}
+                    q ${step * radius} 0 
+                    ${step * radius} ${step * factor * radius}
+                    V ${coordinates.endY - step * factor * radius}
+                    q ${0} ${step * factor * radius}
+                    ${step} ${step * factor * radius}
+                    H ${coordinates.endX}
                   `;
+
     let pathl2l = `M
                     ${coordinates.startX} ${coordinates.startY} 
                     h ${step * stem * -1} 
-                    q ${step * -1} 0 
-                    ${step * -1} ${step * factor}
-                    V ${coordinates.endY - step * factor}
-                    q ${0} ${step * factor}
-                    ${step} ${step * factor}
+                    q ${step * -1 * radius} 0 
+                    ${step * -1 * radius} ${step * factor * radius}
+                    V ${coordinates.endY - step * factor * radius}
+                    q ${0} ${step * factor * radius}
+                    ${step * radius} ${step * factor * radius}
                     H ${coordinates.endX}
                   `;
+
     let pathr2r = `M
-                  ${coordinates.startX} ${coordinates.startY} 
-                  h ${step * stem + distanceX + step} 
-                  q ${step} 0 
-                  ${step} ${step * factor}
-                  V ${coordinates.endY - step * factor}
-                  q 0 ${step * factor}
-                  ${-step} ${step * factor}
-                  H ${coordinates.endX}
-                `;
+                    ${coordinates.startX} ${coordinates.startY} 
+                    h ${step * stem + distanceX + step} 
+                    q ${step * radius} 0 
+                    ${step * radius} ${step * factor * radius}
+                    V ${coordinates.endY - step * factor * radius}
+                    q 0 ${step * factor * radius}
+                    ${-step} ${step * factor * radius}
+                    H ${coordinates.endX}
+                  `;
 
     let path = pathr2l; // default
+
     switch (direction) {
       case "l2l":
         path = pathl2l;
@@ -103,41 +112,44 @@ export default function NarrowSConnector(props: NarrowSConnectorProps) {
     let pathr2l = `M
                     ${coordinates.startX} ${coordinates.startY} 
                     h ${step * stem} 
-                    q ${step} 0 
-                    ${step} ${-step * factor}
-                    v ${distanceY / 2 + step * 2 * factor}
-                    q 0 ${-step * factor}
-                    ${-step} ${-step * factor}
-                    h ${distanceX - step - step * stem}
-                    q ${-step} 0
-                    ${-step} ${-step * factor}
-                    V ${coordinates.endY + step * factor}
-                    q 0 ${-step * factor}
-                    ${step} ${-step * factor}
+                    q ${step * radius} 0 
+                    ${step * radius} ${-step * factor * radius}
+                    v ${distanceY / 2 + step * 2 * factor * radius}
+                    q 0 ${-step * factor * radius}
+                    ${-step * radius} ${-step * factor * radius}
+                    h ${distanceX - step * stem * 2}
+                    q ${-step * radius} 0
+                    ${-step * radius} ${-step * factor * radius}
+                    V ${coordinates.endY + step * factor * radius}
+                    q 0 ${-step * factor * radius}
+                    ${step * radius} ${-step * factor * radius}
                     H ${coordinates.endX}
                   `;
 
     let pathl2l = `M
-                  ${coordinates.startX} ${coordinates.startY} 
-                  h ${step * stem + distanceX - step} 
-                  q ${step * -1} 0 
-                  ${step * -1} ${-step * factor}
-                  V ${coordinates.endY + step * factor}
-                  q 0 ${-step * factor}
-                  ${step} ${-step * factor}
-                  H ${coordinates.endX}
-                `;
+                    ${coordinates.startX} ${coordinates.startY} 
+                    h ${step * stem * -1 + distanceX} 
+                    q ${step * -1 * radius} 0 
+                    ${step * -1 * radius} ${-step * factor * radius}
+                    V ${coordinates.endY + step * factor * radius}
+                    q 0 ${-step * factor * radius}
+                    ${step * radius} ${-step * factor * radius}
+                    H ${coordinates.endX}
+                  `;
+
     let pathr2r = `M
-                  ${coordinates.startX} ${coordinates.startY} 
-                  h ${step * stem} 
-                  q ${step} 0 
-                  ${step} ${step * factor * -1}
-                  V ${coordinates.endY + step * factor}
-                  q ${0} ${step * factor * -1}
-                  ${step * -1} ${step * factor * -1}
-                  H ${coordinates.endX}
-                `;
+                    ${coordinates.startX} ${coordinates.startY} 
+                    h ${step * stem} 
+                    q ${step * radius} 0 
+                    ${step * radius} ${step * factor * -1 * radius}
+                    V ${coordinates.endY + step * factor * radius}
+                    q ${0} ${step * factor * -1 * radius}
+                    ${step * -1 * radius} ${step * factor * -1 * radius}
+                    H ${coordinates.endX}
+                  `;
+
     let path = pathr2l; // default
+
     switch (direction) {
       case "l2l":
         path = pathl2l;

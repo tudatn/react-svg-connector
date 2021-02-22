@@ -1,14 +1,14 @@
-# react-svg-connectors
+# react-svg-connector
 
 React component to draw svg connectors to connect any React components
 
 ## Installation
 ```
-npm install react-svg-connectors
+npm install react-svg-connector
 
 or
 
-yarn add react-svg-connectors
+yarn add react-svg-connector
 ```
 
 ## Usage
@@ -28,7 +28,7 @@ Please run a full example to see all available props.
 
 `narrow-s shape`
 
-<img src="https://user-images.githubusercontent.com/26643781/108642895-cff9cd00-745c-11eb-9104-f114f3763fe8.gif" width="400">
+<img src="https://user-images.githubusercontent.com/26643781/108642895-cff9cd00-745c-11eb-9104-f114f3763fe8.gif" width="600">
 
 ```js
 

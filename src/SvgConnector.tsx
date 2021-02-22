@@ -15,6 +15,7 @@ interface Props {
   roundCorner?: boolean;
   stroke?: string;
   strokeWidth?: number;
+  minStep?: number;
 }
 
 export interface ShapeConnectorProps {
@@ -118,6 +119,7 @@ export default function SvgConnector(props: Props) {
           strokeWidth={props.strokeWidth}
           roundCorner={props.roundCorner}
           direction={props.direction}
+          minStep={props.minStep}
         />
       )}
     </div>

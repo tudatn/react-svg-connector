@@ -33,14 +33,15 @@ export default function NarrowSConnector(props: NarrowSConnectorProps) {
 
   let stem = props.stem || 0;
   const grids = props.grids || 5;
-  if (stem >= grids - 1) {
-    stem = grids - 2;
-  }
 
   const radius = props.roundCorner ? 1 : 0;
 
   const stepX = distanceX / grids;
   const stepY = distanceY / grids;
+
+  if (stem >= Math.abs(distanceX)) {
+    stem = Math.abs(distanceX) - Math.abs(stepX);
+  }
 
   let step = Math.min(Math.abs(stepX), Math.abs(stepY));
 
@@ -51,7 +52,7 @@ export default function NarrowSConnector(props: NarrowSConnectorProps) {
 
     let pathr2l = `M
                     ${coordinates.startX} ${coordinates.startY} 
-                    h ${step * stem}
+                    h ${stem}
                     q ${step * radius} 0 
                     ${step * radius} ${step * factor * radius}
                     V ${coordinates.endY - step * factor * radius}
@@ -62,7 +63,7 @@ export default function NarrowSConnector(props: NarrowSConnectorProps) {
 
     let pathl2l = `M
                     ${coordinates.startX} ${coordinates.startY} 
-                    h ${step * stem * -1} 
+                    h ${stem * -1} 
                     q ${step * -1 * radius} 0 
                     ${step * -1 * radius} ${step * factor * radius}
                     V ${coordinates.endY - step * factor * radius}
@@ -73,7 +74,7 @@ export default function NarrowSConnector(props: NarrowSConnectorProps) {
 
     let pathr2r = `M
                     ${coordinates.startX} ${coordinates.startY} 
-                    h ${step * stem + distanceX + step} 
+                    h ${stem + distanceX + step} 
                     q ${step * radius} 0 
                     ${step * radius} ${step * factor * radius}
                     V ${coordinates.endY - step * factor * radius}
@@ -111,13 +112,13 @@ export default function NarrowSConnector(props: NarrowSConnectorProps) {
 
     let pathr2l = `M
                     ${coordinates.startX} ${coordinates.startY} 
-                    h ${step * stem} 
+                    h ${stem} 
                     q ${step * radius} 0 
                     ${step * radius} ${-step * factor * radius}
                     v ${distanceY / 2 + step * 2 * factor * radius}
                     q 0 ${-step * factor * radius}
                     ${-step * radius} ${-step * factor * radius}
-                    h ${distanceX - step * stem * 2}
+                    h ${distanceX - stem * 2}
                     q ${-step * radius} 0
                     ${-step * radius} ${-step * factor * radius}
                     V ${coordinates.endY + step * factor * radius}
@@ -128,7 +129,7 @@ export default function NarrowSConnector(props: NarrowSConnectorProps) {
 
     let pathl2l = `M
                     ${coordinates.startX} ${coordinates.startY} 
-                    h ${step * stem * -1 + distanceX} 
+                    h ${stem * -1 + distanceX} 
                     q ${step * -1 * radius} 0 
                     ${step * -1 * radius} ${-step * factor * radius}
                     V ${coordinates.endY + step * factor * radius}
@@ -139,7 +140,7 @@ export default function NarrowSConnector(props: NarrowSConnectorProps) {
 
     let pathr2r = `M
                     ${coordinates.startX} ${coordinates.startY} 
-                    h ${step * stem} 
+                    h ${stem} 
                     q ${step * radius} 0 
                     ${step * radius} ${step * factor * -1 * radius}
                     V ${coordinates.endY + step * factor * radius}

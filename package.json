@@ -1,6 +1,6 @@
 {
   "name": "react-svg-connector",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "React component to draw svg connectors between any React components",
   "main": "lib/index.js",
   "directories": {

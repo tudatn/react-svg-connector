@@ -17,8 +17,11 @@ Component props:
 - el1: first React component
 - el2: second React component
 - shape (`optional`): `'s' | 'narrow-s' | 'line'`
-- direction (`optional`): `'r2l' | 'l2l' | 'r2r' | 'l2r'`
+- direction (`optional`): `'r2l' | 'l2l' | 'r2r' | 'l2r' |'b2t' | 'b2b' | 't2b' | 't2t'`
 - roundCorner (`optional`): `true | false`
+- grid (`optional`): number of grid, used to calculate `step = distanceX(Y) / grid`
+- minStep (`optional`): min value for the `step`
+- stem: min distance from the start point
 
 Please run a full example to see all available props.
 
@@ -55,6 +58,12 @@ const Box2 = styled(Box)`
 function App() {
   const ref1 = useRef();
   const ref2 = useRef();
+
+  const [draw, redraw] = useState(0);
+
+  useEffect(() => {
+    redraw(Math.random());
+  }, [ref1, ref2])
 
   return (
     <Wrapper>

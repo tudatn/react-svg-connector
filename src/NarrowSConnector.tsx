@@ -18,7 +18,7 @@ export default function NarrowSConnector(props: NarrowSConnectorProps) {
     endY: props.endY,
   };
 
-  if (props.direction === "l2r") {
+  if (props.direction === "l2r" || props.direction === "t2b") {
     // swap elements
     coordinates = {
       startX: props.endX,
@@ -50,7 +50,7 @@ export default function NarrowSConnector(props: NarrowSConnectorProps) {
   function corner12(direction?: ShapeDirection) {
     const factor = distanceX * distanceY >= 0 ? 1 : -1;
 
-    let pathr2l = `M
+    const pathr2l = `M
                     ${coordinates.startX} ${coordinates.startY} 
                     h ${stem}
                     q ${step * radius} 0 
@@ -61,7 +61,7 @@ export default function NarrowSConnector(props: NarrowSConnectorProps) {
                     H ${coordinates.endX}
                   `;
 
-    let pathl2l = `M
+    const pathl2l = `M
                     ${coordinates.startX} ${coordinates.startY} 
                     h ${stem * -1} 
                     q ${step * -1 * radius} 0 
@@ -72,7 +72,7 @@ export default function NarrowSConnector(props: NarrowSConnectorProps) {
                     H ${coordinates.endX}
                   `;
 
-    let pathr2r = `M
+    const pathr2r = `M
                     ${coordinates.startX} ${coordinates.startY} 
                     h ${stem + distanceX + step} 
                     q ${step * radius} 0 
@@ -92,6 +92,69 @@ export default function NarrowSConnector(props: NarrowSConnectorProps) {
       case "r2r":
         path = pathr2r;
         break;
+      case "b2t":
+        path = pathr2l;
+        break;
+      default:
+        break;
+    }
+    return (
+      <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+        <path
+          d={path}
+          stroke={props.stroke || "orange"}
+          strokeWidth={props.strokeWidth || 3}
+          fill="transparent"
+        />
+      </svg>
+    );
+  }
+
+  function corner21(direction?: ShapeDirection) {
+    const factor = distanceX * distanceY >= 0 ? 1 : -1;
+
+    const pathb2t = `M
+                    ${coordinates.startX} ${coordinates.startY} 
+                    v ${stem}
+                    q  0 ${step * radius}
+                     ${step * factor * radius} ${step * radius}
+                    H ${coordinates.endX - step * factor * radius}
+                    q ${step * factor * radius} 0
+                     ${step * factor * radius} ${step}
+                    V ${coordinates.endY}
+                  `;
+
+    const patht2t = `M
+                    ${coordinates.startX} ${coordinates.startY} 
+                    v ${stem * -1} 
+                    q 0 ${step * -1 * radius}
+                    ${step * factor * radius} ${step * -1 * radius} 
+                    H ${coordinates.endX - step * factor * radius}
+                    q ${step * factor * radius} 0
+                    ${step * factor * radius} ${step * radius}
+                    V ${coordinates.endY}
+                  `;
+
+    const pathb2b = `M
+                    ${coordinates.startX} ${coordinates.startY} 
+                    v ${stem + distanceY + step} 
+                    q 0 ${step * radius}
+                    ${step * factor * radius} ${step * radius}
+                    H ${coordinates.endX - step * factor * radius}
+                    q ${step * factor * radius} 0
+                    ${step * factor * radius} ${-step}
+                    V ${coordinates.endY}
+                  `;
+
+    let path = pathb2t; // default
+
+    switch (direction) {
+      case "b2b":
+        path = pathb2b;
+        break;
+      case "t2t":
+        path = patht2t;
+        break;
       default:
         break;
     }
@@ -110,7 +173,7 @@ export default function NarrowSConnector(props: NarrowSConnectorProps) {
   function corner34(direction?: ShapeDirection) {
     const factor = distanceX * distanceY > 0 ? 1 : -1;
 
-    let pathr2l = `M
+    let pathb2t = `M
                     ${coordinates.startX} ${coordinates.startY} 
                     h ${stem} 
                     q ${step * radius} 0 
@@ -127,7 +190,7 @@ export default function NarrowSConnector(props: NarrowSConnectorProps) {
                     H ${coordinates.endX}
                   `;
 
-    let pathl2l = `M
+    let pathb2b = `M
                     ${coordinates.startX} ${coordinates.startY} 
                     h ${stem * -1 + distanceX} 
                     q ${step * -1 * radius} 0 
@@ -138,7 +201,7 @@ export default function NarrowSConnector(props: NarrowSConnectorProps) {
                     H ${coordinates.endX}
                   `;
 
-    let pathr2r = `M
+    let patht2t = `M
                     ${coordinates.startX} ${coordinates.startY} 
                     h ${stem} 
                     q ${step * radius} 0 
@@ -149,14 +212,14 @@ export default function NarrowSConnector(props: NarrowSConnectorProps) {
                     H ${coordinates.endX}
                   `;
 
-    let path = pathr2l; // default
+    let path = pathb2t; // default
 
     switch (direction) {
-      case "l2l":
-        path = pathl2l;
+      case "b2b":
+        path = pathb2b;
         break;
-      case "r2r":
-        path = pathr2r;
+      case "t2t":
+        path = patht2t;
         break;
       default:
         break;
@@ -171,6 +234,81 @@ export default function NarrowSConnector(props: NarrowSConnectorProps) {
         />
       </svg>
     );
+  }
+
+  function corner43(direction?: ShapeDirection) {
+    const factor = distanceX * distanceY > 0 ? 1 : -1;
+
+    let pathb2t = `M
+                    ${coordinates.startX} ${coordinates.startY} 
+                    v ${stem} 
+                    q 0 ${step * radius}
+                    ${-step * factor * radius}  ${step * radius}
+                    h ${distanceX / 2 + step * 2 * factor * radius}
+                    q ${-step * factor * radius} 0
+                    ${-step * factor * radius} ${-step * radius}
+                    v ${distanceY - stem * 2}
+                    q 0 ${-step * radius}
+                     ${-step * factor * radius} ${-step * radius}
+                    H ${coordinates.endX + step * factor * radius}
+                    q ${-step * factor * radius} 0
+                    ${-step * factor * radius} ${step * radius}
+                    V ${coordinates.endY}
+                  `;
+
+    let patht2t = `M
+                    ${coordinates.startX} ${coordinates.startY} 
+                    v ${stem * -1 + distanceY}
+                    q 0 ${step * -1 * radius}
+                    ${-step * factor * radius} ${step * -1 * radius}
+                    H ${coordinates.endX + step * factor * radius}
+                    q ${-step * factor * radius} 0
+                    ${-step * factor * radius} ${step * radius} 
+                    V ${coordinates.endY}
+                  `;
+
+    let pathb2b = `M
+                    ${coordinates.startX} ${coordinates.startY} 
+                    v ${stem} 
+                    q 0 ${step * radius}
+                    ${step * factor * -1 * radius} ${step * radius}
+                    H ${coordinates.endX + step * factor * radius}
+                    q ${step * factor * -1 * radius} 0
+                    ${step * factor * -1 * radius} ${step * -1 * radius}
+                    V ${coordinates.endY}
+                  `;
+
+    let path = pathb2t; // default
+
+    switch (direction) {
+      case "b2b":
+        path = pathb2b;
+        break;
+      case "t2t":
+        path = patht2t;
+        break;
+      default:
+        break;
+    }
+    return (
+      <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+        <path
+          d={path}
+          stroke={props.stroke || "orange"}
+          strokeWidth={props.strokeWidth || 3}
+          fill="transparent"
+        />
+      </svg>
+    );
+  }
+
+  const ySpaceDirections = ["b2t", "b2b", "t2t", "t2b"];
+  if (ySpaceDirections.includes(props.direction || "")) {
+    if (distanceY >= 0) {
+      return corner21(props.direction);
+    } else {
+      return corner43(props.direction);
+    }
   }
 
   // corner 1 & 2

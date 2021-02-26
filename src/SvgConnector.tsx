@@ -3,7 +3,15 @@ import NarrowSConnector from "./NarrowSConnector";
 import LineConnector from "./LineConnector";
 import SConnector from "./SConnector";
 
-export type ShapeDirection = "r2l" | "l2r" | "l2l" | "r2r";
+export type ShapeDirection =
+  | "r2l"
+  | "l2r"
+  | "l2l"
+  | "r2r"
+  | "b2t"
+  | "b2b"
+  | "t2t"
+  | "t2b";
 
 interface Props {
   el1: HTMLDivElement;
@@ -43,27 +51,60 @@ export default function SvgConnector(props: Props) {
   }
 
   function getNewCoordinates() {
-    let startX = getCoords(props.el1).right;
-    let startY =
-      getCoords(props.el1).top +
-      (getCoords(props.el1).bottom - getCoords(props.el1).top) / 2;
+    const el1Coords = getCoords(props.el1);
+    const el2Coords = getCoords(props.el2);
 
-    let endX = getCoords(props.el2).left;
-    let endY =
-      getCoords(props.el2).top +
-      (getCoords(props.el2).bottom - getCoords(props.el2).top) / 2;
+    const el1Dimesion = {
+      width: el1Coords.right - el1Coords.left,
+      height: el1Coords.bottom - el1Coords.top,
+    };
+
+    const el2Dimesion = {
+      width: el2Coords.right - el2Coords.left,
+      height: el2Coords.bottom - el2Coords.top,
+    };
+
+    let startX = el1Coords.right;
+    let startY = el1Coords.top + el1Dimesion.height / 2;
+
+    let endX = el2Coords.left;
+    let endY = el2Coords.top + el2Dimesion.height / 2;
 
     switch (props.direction) {
       case "l2l":
-        startX = getCoords(props.el1).left;
+        startX = el1Coords.left;
         break;
       case "l2r":
-        startX = getCoords(props.el1).left;
-        endX = getCoords(props.el2).right;
+        startX = el1Coords.left;
+        endX = el2Coords.right;
         break;
       case "r2r":
-        startX = getCoords(props.el1).right;
-        endX = getCoords(props.el2).right;
+        startX = el1Coords.right;
+        endX = el2Coords.right;
+        break;
+      case "b2t":
+        startX = el1Coords.left + el1Dimesion.width / 2;
+        startY = el1Coords.bottom;
+        endX = el2Coords.left + el2Dimesion.width / 2;
+        endY = el2Coords.top;
+        break;
+      case "b2b":
+        startX = el1Coords.left + el1Dimesion.width / 2;
+        startY = el1Coords.bottom;
+        endX = el2Coords.left + el2Dimesion.width / 2;
+        endY = el2Coords.bottom;
+        break;
+      case "t2t":
+        startX = el1Coords.left + el1Dimesion.width / 2;
+        startY = el1Coords.top;
+        endX = el2Coords.left + el2Dimesion.width / 2;
+        endY = el2Coords.top;
+        break;
+      case "t2b":
+        startX = el1Coords.left + el1Dimesion.width / 2;
+        startY = el1Coords.top;
+        endX = el2Coords.left + el2Dimesion.width / 2;
+        endY = el2Coords.bottom;
         break;
       default:
         break;

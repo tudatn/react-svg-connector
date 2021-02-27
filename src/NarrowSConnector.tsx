@@ -49,23 +49,13 @@ export default function NarrowSConnector(props: NarrowSConnectorProps) {
 
   function corner12(direction?: ShapeDirection) {
     const factor = distanceX * distanceY >= 0 ? 1 : -1;
+    const l2lFactor = props.direction === "l2l" ? -1 : 1;
 
     const pathr2l = `M
                     ${coordinates.startX} ${coordinates.startY} 
-                    h ${stem}
-                    q ${step * radius} 0 
-                    ${step * radius} ${step * factor * radius}
-                    V ${coordinates.endY - step * factor * radius}
-                    q ${0} ${step * factor * radius}
-                    ${step} ${step * factor * radius}
-                    H ${coordinates.endX}
-                  `;
-
-    const pathl2l = `M
-                    ${coordinates.startX} ${coordinates.startY} 
-                    h ${stem * -1} 
-                    q ${step * -1 * radius} 0 
-                    ${step * -1 * radius} ${step * factor * radius}
+                    h ${stem * l2lFactor}
+                    q ${step * radius * l2lFactor} 0 
+                    ${step * radius * l2lFactor} ${step * factor * radius}
                     V ${coordinates.endY - step * factor * radius}
                     q ${0} ${step * factor * radius}
                     ${step * radius} ${step * factor * radius}
@@ -86,9 +76,6 @@ export default function NarrowSConnector(props: NarrowSConnectorProps) {
     let path = pathr2l; // default
 
     switch (direction) {
-      case "l2l":
-        path = pathl2l;
-        break;
       case "r2r":
         path = pathr2r;
         break;
@@ -112,26 +99,16 @@ export default function NarrowSConnector(props: NarrowSConnectorProps) {
 
   function corner21(direction?: ShapeDirection) {
     const factor = distanceX * distanceY >= 0 ? 1 : -1;
+    const t2tFactor = props.direction === "t2t" ? -1 : 1;
 
     const pathb2t = `M
                     ${coordinates.startX} ${coordinates.startY} 
-                    v ${stem}
-                    q  0 ${step * radius}
+                    v ${stem * t2tFactor}
+                    q  0 ${step * radius * t2tFactor}
+                     ${step * factor * radius} ${step * radius * t2tFactor}
+                    H ${coordinates.endX - step * factor * radius}
+                    q ${step * factor * radius} 0
                      ${step * factor * radius} ${step * radius}
-                    H ${coordinates.endX - step * factor * radius}
-                    q ${step * factor * radius} 0
-                     ${step * factor * radius} ${step}
-                    V ${coordinates.endY}
-                  `;
-
-    const patht2t = `M
-                    ${coordinates.startX} ${coordinates.startY} 
-                    v ${stem * -1} 
-                    q 0 ${step * -1 * radius}
-                    ${step * factor * radius} ${step * -1 * radius} 
-                    H ${coordinates.endX - step * factor * radius}
-                    q ${step * factor * radius} 0
-                    ${step * factor * radius} ${step * radius}
                     V ${coordinates.endY}
                   `;
 
@@ -152,9 +129,6 @@ export default function NarrowSConnector(props: NarrowSConnectorProps) {
       case "b2b":
         path = pathb2b;
         break;
-      case "t2t":
-        path = patht2t;
-        break;
       default:
         break;
     }
@@ -173,7 +147,7 @@ export default function NarrowSConnector(props: NarrowSConnectorProps) {
   function corner34(direction?: ShapeDirection) {
     const factor = distanceX * distanceY > 0 ? 1 : -1;
 
-    let pathb2t = `M
+    let pathr2l = `M
                     ${coordinates.startX} ${coordinates.startY} 
                     h ${stem} 
                     q ${step * radius} 0 
@@ -190,7 +164,7 @@ export default function NarrowSConnector(props: NarrowSConnectorProps) {
                     H ${coordinates.endX}
                   `;
 
-    let pathb2b = `M
+    let pathl2l = `M
                     ${coordinates.startX} ${coordinates.startY} 
                     h ${stem * -1 + distanceX} 
                     q ${step * -1 * radius} 0 
@@ -201,9 +175,9 @@ export default function NarrowSConnector(props: NarrowSConnectorProps) {
                     H ${coordinates.endX}
                   `;
 
-    let patht2t = `M
+    let pathr2r = `M
                     ${coordinates.startX} ${coordinates.startY} 
-                    h ${stem} 
+                    h ${stem}
                     q ${step * radius} 0 
                     ${step * radius} ${step * factor * -1 * radius}
                     V ${coordinates.endY + step * factor * radius}
@@ -212,14 +186,14 @@ export default function NarrowSConnector(props: NarrowSConnectorProps) {
                     H ${coordinates.endX}
                   `;
 
-    let path = pathb2t; // default
+    let path = pathr2l; // default
 
     switch (direction) {
-      case "b2b":
-        path = pathb2b;
+      case "l2l":
+        path = pathl2l;
         break;
-      case "t2t":
-        path = patht2t;
+      case "r2r":
+        path = pathr2r;
         break;
       default:
         break;

@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import Draggable from "react-draggable";
 import styled from "styled-components/macro";
-import Connector from "react-svg-connector";
+import Connector from "./Connector";
 
 const Wrapper = styled.div`
   position: relative;
@@ -125,6 +125,8 @@ function App() {
         direction="b2t"
         stem={10}
         roundCorner={true}
+        endArrow={true}
+        arrowSize={3}
       />
       <Connector
         el1={refs.current["box15"]?.current}

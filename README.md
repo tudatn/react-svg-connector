@@ -32,6 +32,11 @@ Please run a full example to see all available props.
 
 `narrow-s shape`
 
+<img src="https://user-images.githubusercontent.com/26643781/109394767-80dced80-78dd-11eb-8bd5-ff0337b79ebe.png" width="400">
+
+<img src="https://user-images.githubusercontent.com/26643781/109394769-833f4780-78dd-11eb-9555-de5c1bb039c8.png" width="400">
+
+
 <img src="https://user-images.githubusercontent.com/26643781/108642895-cff9cd00-745c-11eb-9104-f114f3763fe8.gif" width="600">
 
 ```js

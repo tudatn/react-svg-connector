@@ -30,7 +30,7 @@ Please run a full example to see all available props.
 
 `S shape`
 
-<img src="https://user-images.githubusercontent.com/26643781/108642893-ce300980-745c-11eb-9e58-ba95297899cb.gif" width="400">
+<img src="https://user-images.githubusercontent.com/26643781/109436187-40f83200-79d3-11eb-9d5d-93ed82d40791.gif" width="400">
 
 
 `narrow-s shape`
@@ -40,7 +40,7 @@ Please run a full example to see all available props.
 <img src="https://user-images.githubusercontent.com/26643781/109394769-833f4780-78dd-11eb-9555-de5c1bb039c8.png" width="400">
 
 
-<img src="https://user-images.githubusercontent.com/26643781/108642895-cff9cd00-745c-11eb-9104-f114f3763fe8.gif" width="600">
+<img src="https://user-images.githubusercontent.com/26643781/109436188-42c1f580-79d3-11eb-9a62-f85fcc2b2f6c.gif" width="600">
 
 ```ts
 const Wrapper = styled.div`

@@ -21,7 +21,10 @@ Component props:
 - roundCorner (`optional`): `true | false`
 - grid (`optional`): number of grid, used to calculate `step = distanceX(Y) / grid`
 - minStep (`optional`): min value for the `step`
-- stem: min distance from the start point
+- stem(`optional`): min distance from the start point
+- endArrow(`optional`): `true | false`
+- startArrow(`optional`): `true | false`
+- arrowSize(`optional`): arrow size
 
 Please run a full example to see all available props.
 

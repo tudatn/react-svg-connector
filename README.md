@@ -42,7 +42,7 @@ Please run a full example to see all available props.
 
 <img src="https://user-images.githubusercontent.com/26643781/108642895-cff9cd00-745c-11eb-9104-f114f3763fe8.gif" width="600">
 
-```js
+```ts
 const Wrapper = styled.div`
   position: relative;
   height: 100vh;
@@ -57,21 +57,27 @@ const Box = styled.div`
 
 const Box1 = styled(Box)`
   background-color: green;
+  position: absolute;
+  top: 200px;
+  left: 200px;
 `;
 
 const Box2 = styled(Box)`
   background-color: red;
+  position: absolute;
+  top: 400px;
+  left: 500px;
 `;
 
 function App() {
-  const ref1 = useRef();
-  const ref2 = useRef();
+  const ref1 = useRef<any>();
+  const ref2 = useRef<any>();
 
   const [draw, redraw] = useState(0);
 
   useEffect(() => {
     redraw(Math.random());
-  }, [ref1, ref2])
+  }, [ref1, ref2]);
 
   return (
     <Wrapper>
@@ -81,9 +87,10 @@ function App() {
         shape="narrow-s"
         direction="r2l" // "l2l", "r2r", "l2l"
         roundCorner={true}
+        endArrow={true}
       />
-        <Box1 ref={ref1} />
-        <Box2 ref={ref2} />
+      <Box1 ref={ref1} />
+      <Box2 ref={ref2} />
     </Wrapper>
   );
 }

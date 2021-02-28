@@ -9,6 +9,9 @@ interface NarrowSConnectorProps extends ShapeConnectorProps {
   roundCorner?: boolean;
   direction?: ShapeDirection;
   minStep?: number;
+  arrowSize?: number;
+  endArrow?: boolean;
+  startArrow?: boolean;
 }
 
 export default function NarrowSConnector(props: NarrowSConnectorProps) {
@@ -42,7 +45,10 @@ export default function NarrowSConnector(props: NarrowSConnectorProps) {
 
   let step = Math.min(Math.abs(stepX), Math.abs(stepY));
 
-  step = Math.max(step, props.minStep || 5);
+  step = Math.min(step, props.minStep || step);
+
+  const arrowSize =
+    props.arrowSize || (props.strokeWidth ? props.strokeWidth * 3 : 10);
 
   function corner12(direction?: ShapeDirection) {
     const factor = distanceX * distanceY >= 0 ? 1 : -1;
@@ -90,6 +96,22 @@ export default function NarrowSConnector(props: NarrowSConnectorProps) {
           strokeWidth={props.strokeWidth || 3}
           fill="transparent"
         />
+        {props.endArrow && (
+          <Arrow
+            tip={coordinates.end}
+            size={arrowSize}
+            rotateAngle={props.direction === "r2r" ? 180 : 0}
+            stroke={props.stroke || "orange"}
+          />
+        )}
+        {props.startArrow && (
+          <Arrow
+            tip={coordinates.start}
+            size={arrowSize}
+            rotateAngle={props.direction === "l2l" ? 0 : 180}
+            stroke={props.stroke || "orange"}
+          />
+        )}
       </svg>
     );
   }
@@ -137,6 +159,22 @@ export default function NarrowSConnector(props: NarrowSConnectorProps) {
           strokeWidth={props.strokeWidth || 3}
           fill="transparent"
         />
+        {props.endArrow && (
+          <Arrow
+            tip={coordinates.end}
+            size={arrowSize}
+            rotateAngle={props.direction === "b2b" ? 270 : 90}
+            stroke={props.stroke || "orange"}
+          />
+        )}
+        {props.startArrow && (
+          <Arrow
+            tip={coordinates.start}
+            size={arrowSize}
+            rotateAngle={props.direction === "t2t" ? 90 : 270}
+            stroke={props.stroke || "orange"}
+          />
+        )}
       </svg>
     );
   }
@@ -203,6 +241,22 @@ export default function NarrowSConnector(props: NarrowSConnectorProps) {
           strokeWidth={props.strokeWidth || 3}
           fill="transparent"
         />
+        {props.endArrow && (
+          <Arrow
+            tip={coordinates.end}
+            size={arrowSize}
+            rotateAngle={props.direction === "r2r" ? 180 : 0}
+            stroke={props.stroke || "orange"}
+          />
+        )}
+        {props.startArrow && (
+          <Arrow
+            tip={coordinates.start}
+            size={arrowSize}
+            rotateAngle={props.direction === "l2l" ? 0 : 180}
+            stroke={props.stroke || "orange"}
+          />
+        )}
       </svg>
     );
   }
@@ -269,29 +323,30 @@ export default function NarrowSConnector(props: NarrowSConnectorProps) {
           strokeWidth={props.strokeWidth || 3}
           fill="transparent"
         />
+        {props.endArrow && (
+          <Arrow
+            tip={coordinates.end}
+            size={arrowSize}
+            rotateAngle={props.direction === "b2b" ? 270 : 90}
+            stroke={props.stroke || "orange"}
+          />
+        )}
+        {props.startArrow && (
+          <Arrow
+            tip={coordinates.start}
+            size={arrowSize}
+            rotateAngle={props.direction === "t2t" ? 90 : 270}
+            stroke={props.stroke || "orange"}
+          />
+        )}
       </svg>
     );
   }
 
-  const arrowSize =
-    props.arrowSize || (props.strokeWidth ? props.strokeWidth * 2 : 3);
-
   const ySpaceDirections = ["b2t", "b2b", "t2t", "t2b"];
   if (ySpaceDirections.includes(props.direction || "")) {
     if (distanceY >= 0) {
-      return (
-        <>
-          {corner21(props.direction)}
-          {props.endArrow && (
-            <Arrow
-              tip={props.end}
-              size={arrowSize}
-              stroke={props.stroke}
-              strokeWidth={props.strokeWidth}
-            />
-          )}
-        </>
-      );
+      return corner21(props.direction);
     } else {
       return corner43(props.direction);
     }

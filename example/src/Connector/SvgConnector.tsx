@@ -164,6 +164,9 @@ export default function SvgConnector(props: Props) {
           end={coordinates.end}
           stroke={props.stroke}
           strokeWidth={props.strokeWidth}
+          startArrow={props.startArrow}
+          endArrow={props.endArrow}
+          arrowSize={props.arrowSize}
         />
       )}
       {props.shape === "s" && (
@@ -172,6 +175,9 @@ export default function SvgConnector(props: Props) {
           end={coordinates.end}
           stroke={props.stroke}
           strokeWidth={props.strokeWidth}
+          startArrow={props.startArrow}
+          endArrow={props.endArrow}
+          arrowSize={props.arrowSize}
         />
       )}
       {props.shape === "narrow-s" && (
@@ -187,6 +193,7 @@ export default function SvgConnector(props: Props) {
           minStep={props.minStep}
           startArrow={props.startArrow}
           endArrow={props.endArrow}
+          arrowSize={props.arrowSize}
         />
       )}
     </div>

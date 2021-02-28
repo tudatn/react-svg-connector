@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import Draggable from "react-draggable";
 import styled from "styled-components/macro";
-import Connector from "./Connector";
+import Connector from "react-svg-connector";
 
 const Wrapper = styled.div`
   position: relative;
@@ -74,7 +74,13 @@ function App() {
         el2={refs.current["box2"]?.current}
         shape="narrow-s"
         direction="r2l"
-        roundCorner={true}
+        roundCorner={false}
+        endArrow={true}
+        startArrow={true}
+        stem={30}
+        minStep={100}
+        strokeWidth={1}
+        arrowSize={5}
       />
       <Connector
         el1={refs.current["box3"]?.current}
@@ -83,6 +89,8 @@ function App() {
         direction="l2l"
         stem={10}
         roundCorner={true}
+        endArrow={true}
+        startArrow={true}
       />
       <Connector
         el1={refs.current["box5"]?.current}
@@ -91,6 +99,8 @@ function App() {
         direction="l2r"
         stem={10}
         roundCorner={true}
+        endArrow={true}
+        startArrow={true}
       />
       <Connector
         el1={refs.current["box7"]?.current}
@@ -99,6 +109,9 @@ function App() {
         direction="r2r"
         stem={10}
         roundCorner={true}
+        endArrow={true}
+        startArrow={true}
+        minStep={10}
       />
 
       {/* YSPACE */}
@@ -109,6 +122,8 @@ function App() {
         direction="t2b"
         stem={10}
         roundCorner={true}
+        endArrow={true}
+        startArrow={true}
       />
       <Connector
         el1={refs.current["box11"]?.current}
@@ -117,6 +132,8 @@ function App() {
         direction="t2t"
         stem={10}
         roundCorner={true}
+        endArrow={true}
+        startArrow={true}
       />
       <Connector
         el1={refs.current["box13"]?.current}
@@ -126,7 +143,7 @@ function App() {
         stem={10}
         roundCorner={true}
         endArrow={true}
-        arrowSize={3}
+        startArrow={true}
       />
       <Connector
         el1={refs.current["box15"]?.current}
@@ -134,7 +151,31 @@ function App() {
         shape="narrow-s"
         direction="b2b"
         stem={10}
+        minStep={10}
         roundCorner={true}
+        endArrow={true}
+        startArrow={true}
+      />
+      <Connector
+        el1={refs.current["box17"]?.current}
+        el2={refs.current["box18"]?.current}
+        shape="s"
+        endArrow={true}
+        startArrow={true}
+      />
+      <Connector
+        el1={refs.current["box22"]?.current}
+        el2={refs.current["box21"]?.current}
+        shape="s"
+        endArrow={true}
+        startArrow={true}
+      />
+      <Connector
+        el1={refs.current["box19"]?.current}
+        el2={refs.current["box20"]?.current}
+        shape="line"
+        endArrow={true}
+        startArrow={true}
       />
 
       <Draggable onStart={onStart} onStop={onStop} onDrag={onDrag}>
@@ -186,6 +227,28 @@ function App() {
       </Draggable>
       <Draggable onStart={onStart} onStop={onStop} onDrag={onDrag}>
         <Box2 ref={addRef("box16")} top="550px" left="1300px" />
+      </Draggable>
+
+      {/* Line */}
+      <Draggable onStart={onStart} onStop={onStop} onDrag={onDrag}>
+        <Box1 ref={addRef("box17")} top="650px" left="150px" />
+      </Draggable>
+      <Draggable onStart={onStart} onStop={onStop} onDrag={onDrag}>
+        <Box2 ref={addRef("box18")} top="750px" left="300px" />
+      </Draggable>
+
+      {/* S shape */}
+      <Draggable onStart={onStart} onStop={onStop} onDrag={onDrag}>
+        <Box1 ref={addRef("box19")} top="650px" left="500px" />
+      </Draggable>
+      <Draggable onStart={onStart} onStop={onStop} onDrag={onDrag}>
+        <Box2 ref={addRef("box20")} top="750px" left="700px" />
+      </Draggable>
+      <Draggable onStart={onStart} onStop={onStop} onDrag={onDrag}>
+        <Box1 ref={addRef("box21")} top="650px" left="1100px" />
+      </Draggable>
+      <Draggable onStart={onStart} onStop={onStop} onDrag={onDrag}>
+        <Box2 ref={addRef("box22")} top="750px" left="900px" />
       </Draggable>
     </Wrapper>
   );

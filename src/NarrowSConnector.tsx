@@ -1,4 +1,5 @@
 import React from "react";
+import Arrow from "./Arrow";
 
 import { ShapeConnectorProps, ShapeDirection } from "./SvgConnector";
 
@@ -8,28 +9,27 @@ interface NarrowSConnectorProps extends ShapeConnectorProps {
   roundCorner?: boolean;
   direction?: ShapeDirection;
   minStep?: number;
+  arrowSize?: number;
+  endArrow?: boolean;
+  startArrow?: boolean;
 }
 
 export default function NarrowSConnector(props: NarrowSConnectorProps) {
   let coordinates = {
-    startX: props.startX,
-    startY: props.startY,
-    endX: props.endX,
-    endY: props.endY,
+    start: props.start,
+    end: props.end,
   };
 
   if (props.direction === "l2r" || props.direction === "t2b") {
     // swap elements
     coordinates = {
-      startX: props.endX,
-      startY: props.endY,
-      endX: props.startX,
-      endY: props.startY,
+      start: props.end,
+      end: props.start,
     };
   }
 
-  const distanceX = coordinates.endX - coordinates.startX;
-  const distanceY = coordinates.endY - coordinates.startY;
+  const distanceX = coordinates.end.x - coordinates.start.x;
+  const distanceY = coordinates.end.y - coordinates.start.y;
 
   let stem = props.stem || 0;
   const grids = props.grids || 5;
@@ -45,32 +45,35 @@ export default function NarrowSConnector(props: NarrowSConnectorProps) {
 
   let step = Math.min(Math.abs(stepX), Math.abs(stepY));
 
-  step = Math.max(step, props.minStep || 5);
+  step = Math.min(step, props.minStep || step);
+
+  const arrowSize =
+    props.arrowSize || (props.strokeWidth ? props.strokeWidth * 3 : 10);
 
   function corner12(direction?: ShapeDirection) {
     const factor = distanceX * distanceY >= 0 ? 1 : -1;
     const l2lFactor = props.direction === "l2l" ? -1 : 1;
 
     const pathr2l = `M
-                    ${coordinates.startX} ${coordinates.startY} 
+                    ${coordinates.start.x} ${coordinates.start.y} 
                     h ${stem * l2lFactor}
                     q ${step * radius * l2lFactor} 0 
                     ${step * radius * l2lFactor} ${step * factor * radius}
-                    V ${coordinates.endY - step * factor * radius}
+                    V ${coordinates.end.y - step * factor * radius}
                     q ${0} ${step * factor * radius}
                     ${step * radius} ${step * factor * radius}
-                    H ${coordinates.endX}
+                    H ${coordinates.end.x}
                   `;
 
     const pathr2r = `M
-                    ${coordinates.startX} ${coordinates.startY} 
+                    ${coordinates.start.x} ${coordinates.start.y} 
                     h ${stem + distanceX + step} 
                     q ${step * radius} 0 
                     ${step * radius} ${step * factor * radius}
-                    V ${coordinates.endY - step * factor * radius}
+                    V ${coordinates.end.y - step * factor * radius}
                     q 0 ${step * factor * radius}
                     ${-step} ${step * factor * radius}
-                    H ${coordinates.endX}
+                    H ${coordinates.end.x}
                   `;
 
     let path = pathr2l; // default
@@ -93,6 +96,22 @@ export default function NarrowSConnector(props: NarrowSConnectorProps) {
           strokeWidth={props.strokeWidth || 3}
           fill="transparent"
         />
+        {props.endArrow && (
+          <Arrow
+            tip={coordinates.end}
+            size={arrowSize}
+            rotateAngle={props.direction === "r2r" ? 180 : 0}
+            stroke={props.stroke || "orange"}
+          />
+        )}
+        {props.startArrow && (
+          <Arrow
+            tip={coordinates.start}
+            size={arrowSize}
+            rotateAngle={props.direction === "l2l" ? 0 : 180}
+            stroke={props.stroke || "orange"}
+          />
+        )}
       </svg>
     );
   }
@@ -102,25 +121,25 @@ export default function NarrowSConnector(props: NarrowSConnectorProps) {
     const t2tFactor = props.direction === "t2t" ? -1 : 1;
 
     const pathb2t = `M
-                    ${coordinates.startX} ${coordinates.startY} 
+                    ${coordinates.start.x} ${coordinates.start.y} 
                     v ${stem * t2tFactor}
                     q  0 ${step * radius * t2tFactor}
                      ${step * factor * radius} ${step * radius * t2tFactor}
-                    H ${coordinates.endX - step * factor * radius}
+                    H ${coordinates.end.x - step * factor * radius}
                     q ${step * factor * radius} 0
                      ${step * factor * radius} ${step * radius}
-                    V ${coordinates.endY}
+                    V ${coordinates.end.y}
                   `;
 
     const pathb2b = `M
-                    ${coordinates.startX} ${coordinates.startY} 
+                    ${coordinates.start.x} ${coordinates.start.y} 
                     v ${stem + distanceY + step} 
                     q 0 ${step * radius}
                     ${step * factor * radius} ${step * radius}
-                    H ${coordinates.endX - step * factor * radius}
+                    H ${coordinates.end.x - step * factor * radius}
                     q ${step * factor * radius} 0
                     ${step * factor * radius} ${-step}
-                    V ${coordinates.endY}
+                    V ${coordinates.end.y}
                   `;
 
     let path = pathb2t; // default
@@ -140,6 +159,22 @@ export default function NarrowSConnector(props: NarrowSConnectorProps) {
           strokeWidth={props.strokeWidth || 3}
           fill="transparent"
         />
+        {props.endArrow && (
+          <Arrow
+            tip={coordinates.end}
+            size={arrowSize}
+            rotateAngle={props.direction === "b2b" ? 270 : 90}
+            stroke={props.stroke || "orange"}
+          />
+        )}
+        {props.startArrow && (
+          <Arrow
+            tip={coordinates.start}
+            size={arrowSize}
+            rotateAngle={props.direction === "t2t" ? 90 : 270}
+            stroke={props.stroke || "orange"}
+          />
+        )}
       </svg>
     );
   }
@@ -148,7 +183,7 @@ export default function NarrowSConnector(props: NarrowSConnectorProps) {
     const factor = distanceX * distanceY > 0 ? 1 : -1;
 
     let pathr2l = `M
-                    ${coordinates.startX} ${coordinates.startY} 
+                    ${coordinates.start.x} ${coordinates.start.y} 
                     h ${stem} 
                     q ${step * radius} 0 
                     ${step * radius} ${-step * factor * radius}
@@ -158,32 +193,32 @@ export default function NarrowSConnector(props: NarrowSConnectorProps) {
                     h ${distanceX - stem * 2}
                     q ${-step * radius} 0
                     ${-step * radius} ${-step * factor * radius}
-                    V ${coordinates.endY + step * factor * radius}
+                    V ${coordinates.end.y + step * factor * radius}
                     q 0 ${-step * factor * radius}
                     ${step * radius} ${-step * factor * radius}
-                    H ${coordinates.endX}
+                    H ${coordinates.end.x}
                   `;
 
     let pathl2l = `M
-                    ${coordinates.startX} ${coordinates.startY} 
+                    ${coordinates.start.x} ${coordinates.start.y} 
                     h ${stem * -1 + distanceX} 
                     q ${step * -1 * radius} 0 
                     ${step * -1 * radius} ${-step * factor * radius}
-                    V ${coordinates.endY + step * factor * radius}
+                    V ${coordinates.end.y + step * factor * radius}
                     q 0 ${-step * factor * radius}
                     ${step * radius} ${-step * factor * radius}
-                    H ${coordinates.endX}
+                    H ${coordinates.end.x}
                   `;
 
     let pathr2r = `M
-                    ${coordinates.startX} ${coordinates.startY} 
+                    ${coordinates.start.x} ${coordinates.start.y} 
                     h ${stem}
                     q ${step * radius} 0 
                     ${step * radius} ${step * factor * -1 * radius}
-                    V ${coordinates.endY + step * factor * radius}
+                    V ${coordinates.end.y + step * factor * radius}
                     q ${0} ${step * factor * -1 * radius}
                     ${step * -1 * radius} ${step * factor * -1 * radius}
-                    H ${coordinates.endX}
+                    H ${coordinates.end.x}
                   `;
 
     let path = pathr2l; // default
@@ -206,6 +241,22 @@ export default function NarrowSConnector(props: NarrowSConnectorProps) {
           strokeWidth={props.strokeWidth || 3}
           fill="transparent"
         />
+        {props.endArrow && (
+          <Arrow
+            tip={coordinates.end}
+            size={arrowSize}
+            rotateAngle={props.direction === "r2r" ? 180 : 0}
+            stroke={props.stroke || "orange"}
+          />
+        )}
+        {props.startArrow && (
+          <Arrow
+            tip={coordinates.start}
+            size={arrowSize}
+            rotateAngle={props.direction === "l2l" ? 0 : 180}
+            stroke={props.stroke || "orange"}
+          />
+        )}
       </svg>
     );
   }
@@ -214,7 +265,7 @@ export default function NarrowSConnector(props: NarrowSConnectorProps) {
     const factor = distanceX * distanceY > 0 ? 1 : -1;
 
     let pathb2t = `M
-                    ${coordinates.startX} ${coordinates.startY} 
+                    ${coordinates.start.x} ${coordinates.start.y} 
                     v ${stem} 
                     q 0 ${step * radius}
                     ${-step * factor * radius}  ${step * radius}
@@ -224,32 +275,32 @@ export default function NarrowSConnector(props: NarrowSConnectorProps) {
                     v ${distanceY - stem * 2}
                     q 0 ${-step * radius}
                      ${-step * factor * radius} ${-step * radius}
-                    H ${coordinates.endX + step * factor * radius}
+                    H ${coordinates.end.x + step * factor * radius}
                     q ${-step * factor * radius} 0
                     ${-step * factor * radius} ${step * radius}
-                    V ${coordinates.endY}
+                    V ${coordinates.end.y}
                   `;
 
     let patht2t = `M
-                    ${coordinates.startX} ${coordinates.startY} 
+                    ${coordinates.start.x} ${coordinates.start.y} 
                     v ${stem * -1 + distanceY}
                     q 0 ${step * -1 * radius}
                     ${-step * factor * radius} ${step * -1 * radius}
-                    H ${coordinates.endX + step * factor * radius}
+                    H ${coordinates.end.x + step * factor * radius}
                     q ${-step * factor * radius} 0
                     ${-step * factor * radius} ${step * radius} 
-                    V ${coordinates.endY}
+                    V ${coordinates.end.y}
                   `;
 
     let pathb2b = `M
-                    ${coordinates.startX} ${coordinates.startY} 
+                    ${coordinates.start.x} ${coordinates.start.y} 
                     v ${stem} 
                     q 0 ${step * radius}
                     ${step * factor * -1 * radius} ${step * radius}
-                    H ${coordinates.endX + step * factor * radius}
+                    H ${coordinates.end.x + step * factor * radius}
                     q ${step * factor * -1 * radius} 0
                     ${step * factor * -1 * radius} ${step * -1 * radius}
-                    V ${coordinates.endY}
+                    V ${coordinates.end.y}
                   `;
 
     let path = pathb2t; // default
@@ -272,6 +323,22 @@ export default function NarrowSConnector(props: NarrowSConnectorProps) {
           strokeWidth={props.strokeWidth || 3}
           fill="transparent"
         />
+        {props.endArrow && (
+          <Arrow
+            tip={coordinates.end}
+            size={arrowSize}
+            rotateAngle={props.direction === "b2b" ? 270 : 90}
+            stroke={props.stroke || "orange"}
+          />
+        )}
+        {props.startArrow && (
+          <Arrow
+            tip={coordinates.start}
+            size={arrowSize}
+            rotateAngle={props.direction === "t2t" ? 90 : 270}
+            stroke={props.stroke || "orange"}
+          />
+        )}
       </svg>
     );
   }

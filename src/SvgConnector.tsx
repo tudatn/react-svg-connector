@@ -24,15 +24,24 @@ interface Props {
   stroke?: string;
   strokeWidth?: number;
   minStep?: number;
+  startArrow?: boolean;
+  endArrow?: boolean;
+  arrowSize?: number;
+}
+
+export interface Point {
+  x: number;
+  y: number;
 }
 
 export interface ShapeConnectorProps {
-  startX: number;
-  startY: number;
-  endX: number;
-  endY: number;
+  start: Point;
+  end: Point;
   stroke?: string;
   strokeWidth?: number;
+  startArrow?: boolean;
+  endArrow?: boolean;
+  arrowSize?: number;
 }
 
 export default function SvgConnector(props: Props) {
@@ -64,53 +73,74 @@ export default function SvgConnector(props: Props) {
       height: el2Coords.bottom - el2Coords.top,
     };
 
-    let startX = el1Coords.right;
-    let startY = el1Coords.top + el1Dimesion.height / 2;
+    let start = {
+      x: el1Coords.right,
+      y: el1Coords.top + el1Dimesion.height / 2,
+    };
 
-    let endX = el2Coords.left;
-    let endY = el2Coords.top + el2Dimesion.height / 2;
+    let end = {
+      x: el2Coords.left,
+      y: el2Coords.top + el2Dimesion.height / 2,
+    };
 
     switch (props.direction) {
       case "l2l":
-        startX = el1Coords.left;
+        start.x = el1Coords.left;
         break;
       case "l2r":
-        startX = el1Coords.left;
-        endX = el2Coords.right;
+        start.x = el1Coords.left;
+        end.x = el2Coords.right;
         break;
       case "r2r":
-        startX = el1Coords.right;
-        endX = el2Coords.right;
+        start.x = el1Coords.right;
+        end.x = el2Coords.right;
         break;
       case "b2t":
-        startX = el1Coords.left + el1Dimesion.width / 2;
-        startY = el1Coords.bottom;
-        endX = el2Coords.left + el2Dimesion.width / 2;
-        endY = el2Coords.top;
+        start = {
+          x: el1Coords.left + el1Dimesion.width / 2,
+
+          y: el1Coords.bottom,
+        };
+        end = {
+          x: el2Coords.left + el2Dimesion.width / 2,
+          y: el2Coords.top,
+        };
         break;
       case "b2b":
-        startX = el1Coords.left + el1Dimesion.width / 2;
-        startY = el1Coords.bottom;
-        endX = el2Coords.left + el2Dimesion.width / 2;
-        endY = el2Coords.bottom;
+        start = {
+          x: el1Coords.left + el1Dimesion.width / 2,
+          y: el1Coords.bottom,
+        };
+        end = {
+          x: el2Coords.left + el2Dimesion.width / 2,
+          y: el2Coords.bottom,
+        };
         break;
       case "t2t":
-        startX = el1Coords.left + el1Dimesion.width / 2;
-        startY = el1Coords.top;
-        endX = el2Coords.left + el2Dimesion.width / 2;
-        endY = el2Coords.top;
+        start = {
+          x: el1Coords.left + el1Dimesion.width / 2,
+          y: el1Coords.top,
+        };
+        end = {
+          x: el2Coords.left + el2Dimesion.width / 2,
+          y: el2Coords.top,
+        };
         break;
       case "t2b":
-        startX = el1Coords.left + el1Dimesion.width / 2;
-        startY = el1Coords.top;
-        endX = el2Coords.left + el2Dimesion.width / 2;
-        endY = el2Coords.bottom;
+        start = {
+          x: el1Coords.left + el1Dimesion.width / 2,
+          y: el1Coords.top,
+        };
+        end = {
+          x: el2Coords.left + el2Dimesion.width / 2,
+          y: el2Coords.bottom,
+        };
         break;
       default:
         break;
     }
 
-    return { startX, startY, endX, endY };
+    return { start, end };
   }
 
   if (!props.el1 || !props.el2) return null;
@@ -130,30 +160,30 @@ export default function SvgConnector(props: Props) {
     >
       {props.shape === "line" && (
         <LineConnector
-          startX={coordinates.startX}
-          startY={coordinates.startY}
-          endX={coordinates.endX}
-          endY={coordinates.endY}
+          start={coordinates.start}
+          end={coordinates.end}
           stroke={props.stroke}
           strokeWidth={props.strokeWidth}
+          startArrow={props.startArrow}
+          endArrow={props.endArrow}
+          arrowSize={props.arrowSize}
         />
       )}
       {props.shape === "s" && (
         <SConnector
-          startX={coordinates.startX}
-          startY={coordinates.startY}
-          endX={coordinates.endX}
+          start={coordinates.start}
+          end={coordinates.end}
           stroke={props.stroke}
           strokeWidth={props.strokeWidth}
-          endY={coordinates.endY}
+          startArrow={props.startArrow}
+          endArrow={props.endArrow}
+          arrowSize={props.arrowSize}
         />
       )}
       {props.shape === "narrow-s" && (
         <NarrowSConnector
-          startX={coordinates.startX}
-          startY={coordinates.startY}
-          endX={coordinates.endX}
-          endY={coordinates.endY}
+          start={coordinates.start}
+          end={coordinates.end}
           stem={props.stem}
           grids={props.grids}
           stroke={props.stroke}
@@ -161,6 +191,9 @@ export default function SvgConnector(props: Props) {
           roundCorner={props.roundCorner}
           direction={props.direction}
           minStep={props.minStep}
+          startArrow={props.startArrow}
+          endArrow={props.endArrow}
+          arrowSize={props.arrowSize}
         />
       )}
     </div>

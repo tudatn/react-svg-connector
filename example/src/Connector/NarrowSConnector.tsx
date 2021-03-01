@@ -14,6 +14,20 @@ interface NarrowSConnectorProps extends ShapeConnectorProps {
   startArrow?: boolean;
 }
 
+/**
+ * Custom S shape svg connector
+ * @param startPoint
+ * @param endPoint
+ * @param grids number of columns in X/Y axis
+ * @param stem min distance from the start point to the first transition
+ * @param roundCorner true to have a curve transition
+ * @param direction (right, left, top, bottom) --> (right, left, top, bottom)
+ * @param minStep radius of the transition curve, default is min of (deltaX/grid, deltaY/grid)
+ * @param arrowSize
+ * @param endArrow
+ * @param startArrow
+ */
+
 export default function NarrowSConnector(props: NarrowSConnectorProps) {
   let coordinates = {
     start: props.startPoint,

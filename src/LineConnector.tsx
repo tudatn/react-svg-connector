@@ -4,6 +4,17 @@ import { ShapeConnectorProps } from "./SvgConnector";
 
 interface LineConnectorProps extends ShapeConnectorProps {}
 
+/**
+ * Line svg connector
+ * @param startPoint
+ * @param endPoint
+ * @param stroke
+ * @param strokeWidth
+ * @param startArrow
+ * @param endArrow
+ * @param arrowSize
+ */
+
 export default function LineConnector(props: LineConnectorProps) {
   const deltaX = props.endPoint.x - props.startPoint.x;
   const deltaY = props.endPoint.y - props.startPoint.y;

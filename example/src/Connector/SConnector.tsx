@@ -3,6 +3,16 @@ import { ShapeConnectorProps } from "./SvgConnector";
 
 interface SConectorProps extends ShapeConnectorProps {}
 
+/**
+ * S shape svg connector
+ * @param startPoint
+ * @param endPoint
+ * @param stroke
+ * @param strokeWidth
+ * @param startArrow
+ * @param endArrow
+ * @param arrowSize
+ */
 export default function SConnector(props: SConectorProps) {
   const distanceX = props.endPoint.x - props.startPoint.x;
   const distanceY = props.endPoint.y - props.startPoint.y;

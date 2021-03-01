@@ -43,6 +43,11 @@ All svg path props are available. Please run a full example to see all available
 <img src="https://user-images.githubusercontent.com/26643781/109436188-42c1f580-79d3-11eb-9a62-f85fcc2b2f6c.gif" width="600">
 
 ```ts
+import Connector from 'react-svg-connector';
+
+// if you want to use core connector components
+import { SConnector, LineConnector, NarrowSConnector } from 'react-svg-connector';
+
 const Wrapper = styled.div`
   position: relative;
   height: 100vh;

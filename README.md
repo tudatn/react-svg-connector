@@ -26,7 +26,7 @@ Component props:
 - startArrow(`optional`): `true | false`
 - arrowSize(`optional`): arrow size
 
-Please run a full example to see all available props.
+All svg path props are available. Please run a full example to see all available props.
 
 `S shape`
 

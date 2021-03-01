@@ -5,8 +5,8 @@ import { ShapeConnectorProps } from "./SvgConnector";
 interface LineConnectorProps extends ShapeConnectorProps {}
 
 export default function LineConnector(props: LineConnectorProps) {
-  const deltaX = props.end.x - props.start.x;
-  const deltaY = props.end.y - props.start.y;
+  const deltaX = props.endPoint.x - props.startPoint.x;
+  const deltaY = props.endPoint.y - props.startPoint.y;
 
   const alpha = Math.atan(deltaY / deltaX);
 
@@ -16,32 +16,24 @@ export default function LineConnector(props: LineConnectorProps) {
     rotateAngle = rotateAngle + 180;
   }
 
-  const start = {
-    x: props.start.x,
-    y: props.start.y,
-  };
-
-  const end = {
-    x: props.end.x,
-    y: props.end.y,
-  };
-
   const arrowSize =
     props.arrowSize || (props.strokeWidth ? props.strokeWidth * 3 : 10);
 
   return (
     <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
-      <line
-        x1={props.start.x}
-        x2={props.end.x}
-        y1={props.start.y}
-        y2={props.end.y}
+      <path
+        {...props}
+        d={`M
+            ${props.startPoint.x} ${props.startPoint.y}
+            L
+            ${props.endPoint.x} ${props.endPoint.y}
+          `}
         stroke={props.stroke || "orange"}
         strokeWidth={props.strokeWidth || 3}
       />
       {props.endArrow && (
         <Arrow
-          tip={end}
+          tip={props.endPoint}
           size={arrowSize}
           rotateAngle={rotateAngle}
           stroke={props.stroke || "orange"}
@@ -49,7 +41,7 @@ export default function LineConnector(props: LineConnectorProps) {
       )}
       {props.startArrow && (
         <Arrow
-          tip={start}
+          tip={props.startPoint}
           size={arrowSize}
           rotateAngle={rotateAngle + 180}
           stroke={props.stroke || "orange"}

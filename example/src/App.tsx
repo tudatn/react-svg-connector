@@ -112,6 +112,7 @@ function App() {
         endArrow={true}
         startArrow={true}
         minStep={10}
+        strokeDasharray="5,10,5"
       />
 
       {/* YSPACE */}

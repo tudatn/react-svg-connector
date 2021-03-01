@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import Draggable from "react-draggable";
 import styled from "styled-components/macro";
-import Connector from "react-svg-connector";
+import Connector from "./Connector";
 
 const Wrapper = styled.div`
   position: relative;
@@ -112,6 +112,7 @@ function App() {
         endArrow={true}
         startArrow={true}
         minStep={10}
+        strokeDasharray="5,10,5"
       />
 
       {/* YSPACE */}

@@ -4,8 +4,8 @@ import { ShapeConnectorProps } from "./SvgConnector";
 interface SConectorProps extends ShapeConnectorProps {}
 
 export default function SConnector(props: SConectorProps) {
-  const distanceX = props.end.x - props.start.x;
-  const distanceY = props.end.y - props.start.y;
+  const distanceX = props.endPoint.x - props.startPoint.x;
+  const distanceY = props.endPoint.y - props.startPoint.y;
   const grids = 4;
   const stepX = distanceX / grids;
   const stepY = distanceY / grids;
@@ -13,8 +13,9 @@ export default function SConnector(props: SConectorProps) {
   return (
     <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
       <path
+        {...props}
         d={`M
-            ${props.start.x} ${props.start.y} 
+            ${props.startPoint.x} ${props.startPoint.y} 
             q 
             ${(stepX * grids) / 2} 0 
             ${(stepX * grids) / 2} ${(stepY * grids) / 2}

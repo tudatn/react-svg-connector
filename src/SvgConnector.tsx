@@ -13,7 +13,7 @@ export type ShapeDirection =
   | "t2t"
   | "t2b";
 
-interface Props {
+export interface Props extends React.SVGProps<SVGPathElement> {
   el1: HTMLDivElement;
   el2: HTMLDivElement;
   shape: "s" | "line" | "narrow-s";
@@ -34,9 +34,9 @@ export interface Point {
   y: number;
 }
 
-export interface ShapeConnectorProps {
-  start: Point;
-  end: Point;
+export interface ShapeConnectorProps extends React.SVGProps<SVGPathElement> {
+  startPoint: Point;
+  endPoint: Point;
   stroke?: string;
   strokeWidth?: number;
   startArrow?: boolean;
@@ -160,10 +160,9 @@ export default function SvgConnector(props: Props) {
     >
       {props.shape === "line" && (
         <LineConnector
-          start={coordinates.start}
-          end={coordinates.end}
-          stroke={props.stroke}
-          strokeWidth={props.strokeWidth}
+          {...props}
+          startPoint={coordinates.start}
+          endPoint={coordinates.end}
           startArrow={props.startArrow}
           endArrow={props.endArrow}
           arrowSize={props.arrowSize}
@@ -171,10 +170,9 @@ export default function SvgConnector(props: Props) {
       )}
       {props.shape === "s" && (
         <SConnector
-          start={coordinates.start}
-          end={coordinates.end}
-          stroke={props.stroke}
-          strokeWidth={props.strokeWidth}
+          {...props}
+          startPoint={coordinates.start}
+          endPoint={coordinates.end}
           startArrow={props.startArrow}
           endArrow={props.endArrow}
           arrowSize={props.arrowSize}
@@ -182,12 +180,11 @@ export default function SvgConnector(props: Props) {
       )}
       {props.shape === "narrow-s" && (
         <NarrowSConnector
-          start={coordinates.start}
-          end={coordinates.end}
+          {...props}
+          startPoint={coordinates.start}
+          endPoint={coordinates.end}
           stem={props.stem}
           grids={props.grids}
-          stroke={props.stroke}
-          strokeWidth={props.strokeWidth}
           roundCorner={props.roundCorner}
           direction={props.direction}
           minStep={props.minStep}

@@ -16,15 +16,15 @@ interface NarrowSConnectorProps extends ShapeConnectorProps {
 
 export default function NarrowSConnector(props: NarrowSConnectorProps) {
   let coordinates = {
-    start: props.start,
-    end: props.end,
+    start: props.startPoint,
+    end: props.endPoint,
   };
 
   if (props.direction === "l2r" || props.direction === "t2b") {
     // swap elements
     coordinates = {
-      start: props.end,
-      end: props.start,
+      start: props.endPoint,
+      end: props.startPoint,
     };
   }
 
@@ -91,6 +91,7 @@ export default function NarrowSConnector(props: NarrowSConnectorProps) {
     return (
       <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
         <path
+          {...props}
           d={path}
           stroke={props.stroke || "orange"}
           strokeWidth={props.strokeWidth || 3}
@@ -154,6 +155,7 @@ export default function NarrowSConnector(props: NarrowSConnectorProps) {
     return (
       <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
         <path
+          {...props}
           d={path}
           stroke={props.stroke || "orange"}
           strokeWidth={props.strokeWidth || 3}
@@ -236,6 +238,7 @@ export default function NarrowSConnector(props: NarrowSConnectorProps) {
     return (
       <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
         <path
+          {...props}
           d={path}
           stroke={props.stroke || "orange"}
           strokeWidth={props.strokeWidth || 3}
@@ -318,6 +321,7 @@ export default function NarrowSConnector(props: NarrowSConnectorProps) {
     return (
       <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
         <path
+          {...props}
           d={path}
           stroke={props.stroke || "orange"}
           strokeWidth={props.strokeWidth || 3}

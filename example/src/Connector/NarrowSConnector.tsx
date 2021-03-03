@@ -29,6 +29,20 @@ interface NarrowSConnectorProps extends ShapeConnectorProps {
  */
 
 export default function NarrowSConnector(props: NarrowSConnectorProps) {
+  const {
+    direction,
+    stroke,
+    strokeWidth,
+    startArrow,
+    endArrow,
+    startPoint,
+    endPoint,
+    arrowSize,
+    roundCorner,
+    minStep,
+    ...rest
+  } = props;
+
   let coordinates = {
     start: props.startPoint,
     end: props.endPoint,
@@ -61,7 +75,7 @@ export default function NarrowSConnector(props: NarrowSConnectorProps) {
 
   step = Math.min(step, props.minStep || step);
 
-  const arrowSize =
+  const cArrowSize =
     props.arrowSize || (props.strokeWidth ? props.strokeWidth * 3 : 10);
 
   function corner12(direction?: ShapeDirection) {
@@ -105,7 +119,7 @@ export default function NarrowSConnector(props: NarrowSConnectorProps) {
     return (
       <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
         <path
-          {...props}
+          {...rest}
           d={path}
           stroke={props.stroke || "orange"}
           strokeWidth={props.strokeWidth || 3}
@@ -114,7 +128,7 @@ export default function NarrowSConnector(props: NarrowSConnectorProps) {
         {props.endArrow && (
           <Arrow
             tip={coordinates.end}
-            size={arrowSize}
+            size={cArrowSize}
             rotateAngle={props.direction === "r2r" ? 180 : 0}
             stroke={props.stroke || "orange"}
           />
@@ -122,7 +136,7 @@ export default function NarrowSConnector(props: NarrowSConnectorProps) {
         {props.startArrow && (
           <Arrow
             tip={coordinates.start}
-            size={arrowSize}
+            size={cArrowSize}
             rotateAngle={props.direction === "l2l" ? 0 : 180}
             stroke={props.stroke || "orange"}
           />
@@ -169,7 +183,7 @@ export default function NarrowSConnector(props: NarrowSConnectorProps) {
     return (
       <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
         <path
-          {...props}
+          {...rest}
           d={path}
           stroke={props.stroke || "orange"}
           strokeWidth={props.strokeWidth || 3}
@@ -178,7 +192,7 @@ export default function NarrowSConnector(props: NarrowSConnectorProps) {
         {props.endArrow && (
           <Arrow
             tip={coordinates.end}
-            size={arrowSize}
+            size={cArrowSize}
             rotateAngle={props.direction === "b2b" ? 270 : 90}
             stroke={props.stroke || "orange"}
           />
@@ -186,7 +200,7 @@ export default function NarrowSConnector(props: NarrowSConnectorProps) {
         {props.startArrow && (
           <Arrow
             tip={coordinates.start}
-            size={arrowSize}
+            size={cArrowSize}
             rotateAngle={props.direction === "t2t" ? 90 : 270}
             stroke={props.stroke || "orange"}
           />
@@ -252,7 +266,7 @@ export default function NarrowSConnector(props: NarrowSConnectorProps) {
     return (
       <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
         <path
-          {...props}
+          {...rest}
           d={path}
           stroke={props.stroke || "orange"}
           strokeWidth={props.strokeWidth || 3}
@@ -261,7 +275,7 @@ export default function NarrowSConnector(props: NarrowSConnectorProps) {
         {props.endArrow && (
           <Arrow
             tip={coordinates.end}
-            size={arrowSize}
+            size={cArrowSize}
             rotateAngle={props.direction === "r2r" ? 180 : 0}
             stroke={props.stroke || "orange"}
           />
@@ -269,7 +283,7 @@ export default function NarrowSConnector(props: NarrowSConnectorProps) {
         {props.startArrow && (
           <Arrow
             tip={coordinates.start}
-            size={arrowSize}
+            size={cArrowSize}
             rotateAngle={props.direction === "l2l" ? 0 : 180}
             stroke={props.stroke || "orange"}
           />
@@ -335,7 +349,7 @@ export default function NarrowSConnector(props: NarrowSConnectorProps) {
     return (
       <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
         <path
-          {...props}
+          {...rest}
           d={path}
           stroke={props.stroke || "orange"}
           strokeWidth={props.strokeWidth || 3}
@@ -344,7 +358,7 @@ export default function NarrowSConnector(props: NarrowSConnectorProps) {
         {props.endArrow && (
           <Arrow
             tip={coordinates.end}
-            size={arrowSize}
+            size={cArrowSize}
             rotateAngle={props.direction === "b2b" ? 270 : 90}
             stroke={props.stroke || "orange"}
           />
@@ -352,7 +366,7 @@ export default function NarrowSConnector(props: NarrowSConnectorProps) {
         {props.startArrow && (
           <Arrow
             tip={coordinates.start}
-            size={arrowSize}
+            size={cArrowSize}
             rotateAngle={props.direction === "t2t" ? 90 : 270}
             stroke={props.stroke || "orange"}
           />

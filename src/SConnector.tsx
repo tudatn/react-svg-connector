@@ -14,6 +14,18 @@ interface SConectorProps extends ShapeConnectorProps {}
  * @param arrowSize
  */
 export default function SConnector(props: SConectorProps) {
+  const {
+    direction,
+    stroke,
+    strokeWidth,
+    startArrow,
+    endArrow,
+    startPoint,
+    endPoint,
+    arrowSize,
+    ...rest
+  } = props;
+
   const distanceX = props.endPoint.x - props.startPoint.x;
   const distanceY = props.endPoint.y - props.startPoint.y;
   const grids = 4;
@@ -23,7 +35,7 @@ export default function SConnector(props: SConectorProps) {
   return (
     <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
       <path
-        {...props}
+        {...rest}
         d={`M
             ${props.startPoint.x} ${props.startPoint.y} 
             q 

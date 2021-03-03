@@ -16,6 +16,18 @@ interface LineConnectorProps extends ShapeConnectorProps {}
  */
 
 export default function LineConnector(props: LineConnectorProps) {
+  const {
+    direction,
+    stroke,
+    strokeWidth,
+    startArrow,
+    endArrow,
+    startPoint,
+    endPoint,
+    arrowSize,
+    ...rest
+  } = props;
+
   const deltaX = props.endPoint.x - props.startPoint.x;
   const deltaY = props.endPoint.y - props.startPoint.y;
 
@@ -27,13 +39,13 @@ export default function LineConnector(props: LineConnectorProps) {
     rotateAngle = rotateAngle + 180;
   }
 
-  const arrowSize =
+  const cArrowSize =
     props.arrowSize || (props.strokeWidth ? props.strokeWidth * 3 : 10);
 
   return (
     <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
       <path
-        {...props}
+        {...rest}
         d={`M
             ${props.startPoint.x} ${props.startPoint.y}
             L
@@ -45,7 +57,7 @@ export default function LineConnector(props: LineConnectorProps) {
       {props.endArrow && (
         <Arrow
           tip={props.endPoint}
-          size={arrowSize}
+          size={cArrowSize}
           rotateAngle={rotateAngle}
           stroke={props.stroke || "orange"}
         />
@@ -53,7 +65,7 @@ export default function LineConnector(props: LineConnectorProps) {
       {props.startArrow && (
         <Arrow
           tip={props.startPoint}
-          size={arrowSize}
+          size={cArrowSize}
           rotateAngle={rotateAngle + 180}
           stroke={props.stroke || "orange"}
         />

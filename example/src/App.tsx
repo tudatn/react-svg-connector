@@ -1,7 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import Draggable from "react-draggable";
 import styled from "styled-components/macro";
-import Connector from "react-svg-connector";
+import Connector from "./Connector";
+import { ConnectorDirectionType, ShapeType } from "./Connector/utils/Constants";
 
 const Wrapper = styled.div`
   position: relative;
@@ -72,111 +73,133 @@ function App() {
       <Connector
         el1={refs.current["box1"]?.current}
         el2={refs.current["box2"]?.current}
-        shape="narrow-s"
-        direction="r2l"
-        roundCorner={false}
-        endArrow={true}
-        startArrow={true}
-        stem={30}
-        minStep={100}
-        strokeWidth={1}
-        arrowSize={5}
+        connectorProps={{
+          shape: ShapeType.NarrowS,
+          narrowSDirection: ConnectorDirectionType.Right2Left,
+          roundCorner: false,
+          endArrow: true,
+          startArrow: true,
+          stem: 30,
+          minStep: 100,
+          strokeWidth: 1,
+          arrowSize: 5,
+        }}
       />
       <Connector
         el1={refs.current["box3"]?.current}
         el2={refs.current["box4"]?.current}
-        shape="narrow-s"
-        direction="l2l"
-        stem={10}
-        roundCorner={true}
-        endArrow={true}
-        startArrow={true}
+        connectorProps={{
+          shape: ShapeType.NarrowS,
+          narrowSDirection: ConnectorDirectionType.Left2Left,
+          stem: 10,
+          roundCorner: true,
+          endArrow: true,
+          startArrow: true,
+        }}
       />
       <Connector
         el1={refs.current["box5"]?.current}
         el2={refs.current["box6"]?.current}
-        shape="narrow-s"
-        direction="l2r"
-        stem={10}
-        roundCorner={true}
-        endArrow={true}
-        startArrow={true}
+        connectorProps={{
+          shape: ShapeType.NarrowS,
+          narrowSDirection: ConnectorDirectionType.Left2Right,
+          stem: 10,
+          roundCorner: true,
+          endArrow: true,
+          startArrow: true,
+        }}
       />
       <Connector
         el1={refs.current["box7"]?.current}
         el2={refs.current["box8"]?.current}
-        shape="narrow-s"
-        direction="r2r"
-        stem={10}
-        roundCorner={true}
-        endArrow={true}
-        startArrow={true}
-        minStep={10}
-        strokeDasharray="5,10,5"
+        connectorProps={{
+          shape: ShapeType.NarrowS,
+          narrowSDirection: ConnectorDirectionType.Right2Right,
+          stem: 10,
+          roundCorner: true,
+          endArrow: true,
+          startArrow: true,
+          minStep: 10,
+          strokeDasharray: "5,10,5",
+        }}
       />
 
       {/* YSPACE */}
       <Connector
         el1={refs.current["box9"]?.current}
         el2={refs.current["box10"]?.current}
-        shape="narrow-s"
-        direction="t2b"
-        stem={10}
-        roundCorner={true}
-        endArrow={true}
-        startArrow={true}
+        connectorProps={{
+          shape: ShapeType.NarrowS,
+          narrowSDirection: ConnectorDirectionType.Top2Bottom,
+          stem: 10,
+          roundCorner: true,
+          endArrow: true,
+          startArrow: true,
+        }}
       />
       <Connector
         el1={refs.current["box11"]?.current}
         el2={refs.current["box12"]?.current}
-        shape="narrow-s"
-        direction="t2t"
-        stem={10}
-        roundCorner={true}
-        endArrow={true}
-        startArrow={true}
+        connectorProps={{
+          shape: ShapeType.NarrowS,
+          narrowSDirection: ConnectorDirectionType.Top2Top,
+          stem: 10,
+          roundCorner: true,
+          endArrow: true,
+          startArrow: true,
+        }}
       />
       <Connector
         el1={refs.current["box13"]?.current}
         el2={refs.current["box14"]?.current}
-        shape="narrow-s"
-        direction="b2t"
-        stem={10}
-        roundCorner={true}
-        endArrow={true}
-        startArrow={true}
+        connectorProps={{
+          shape: ShapeType.NarrowS,
+          narrowSDirection: ConnectorDirectionType.Bottom2Top,
+          stem: 10,
+          roundCorner: true,
+          endArrow: true,
+          startArrow: true,
+        }}
       />
       <Connector
         el1={refs.current["box15"]?.current}
         el2={refs.current["box16"]?.current}
-        shape="narrow-s"
-        direction="b2b"
-        stem={10}
-        minStep={10}
-        roundCorner={true}
-        endArrow={true}
-        startArrow={true}
+        connectorProps={{
+          shape: ShapeType.NarrowS,
+          narrowSDirection: ConnectorDirectionType.Bottom2Bottom,
+          stem: 10,
+          minStep: 10,
+          roundCorner: true,
+          endArrow: true,
+          startArrow: true,
+        }}
       />
       <Connector
         el1={refs.current["box17"]?.current}
         el2={refs.current["box18"]?.current}
-        shape="s"
-        endArrow={true}
-        startArrow={true}
+        connectorProps={{
+          shape: ShapeType.S,
+          endArrow: true,
+          startArrow: true,
+        }}
       />
       <Connector
         el1={refs.current["box22"]?.current}
         el2={refs.current["box21"]?.current}
-        shape="s"
-        endArrow={true}
-        startArrow={true}
+        connectorProps={{
+          shape: ShapeType.S,
+          endArrow: true,
+          startArrow: true,
+        }}
       />
       <Connector
         el1={refs.current["box19"]?.current}
         el2={refs.current["box20"]?.current}
-        shape="line"
-        endArrow={true}
-        startArrow={true}
+        connectorProps={{
+          shape: ShapeType.Line,
+          endArrow: true,
+          startArrow: true,
+        }}
       />
 
       <Draggable onStart={onStart} onStop={onStop} onDrag={onDrag}>

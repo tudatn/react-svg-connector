@@ -1,84 +1,35 @@
 import React, { useRef } from "react";
-import NarrowSConnector from "./NarrowSConnector";
-import LineConnector from "./LineConnector";
-import SConnector from "./SConnector";
+import NarrowSConnector, { NarrowSConnectorProps } from "./NarrowSConnector";
+import LineConnector, { LineConnectorProps } from "./LineConnector";
+import SConnector, { SConectorProps } from "./SConnector";
+import { getCoords } from "./interfaces/Point";
+import { ConnectorDirectionType, ShapeType } from "./utils/Constants";
+import { DistributiveOmit } from "./utils/Type";
 
-export type ShapeDirection =
-  | "r2l"
-  | "l2r"
-  | "l2l"
-  | "r2r"
-  | "b2t"
-  | "b2b"
-  | "t2t"
-  | "t2b";
+export type ConnectorProps = DistributiveOmit<
+  LineConnectorProps | SConectorProps | NarrowSConnectorProps,
+  "startPoint" | "endPoint"
+>;
 
-export interface Props extends React.SVGProps<SVGPathElement> {
+export interface SvgConnectorProps {
+  /** first element (HTML or React component) */
   el1: HTMLDivElement;
+  /** second element (HTML or React component) */
   el2: HTMLDivElement;
-  shape: "s" | "line" | "narrow-s";
-  direction?: ShapeDirection;
-  grids?: number;
-  stem?: number;
-  roundCorner?: boolean;
-  stroke?: string;
-  strokeWidth?: number;
-  minStep?: number;
-  startArrow?: boolean;
-  endArrow?: boolean;
-  arrowSize?: number;
+  /** connector props for the given shape type */
+  connectorProps: ConnectorProps;
 }
 
-export interface Point {
-  x: number;
-  y: number;
-}
-
-export interface ShapeConnectorProps extends React.SVGProps<SVGPathElement> {
-  startPoint: Point;
-  endPoint: Point;
-  stroke?: string;
-  strokeWidth?: number;
-  startArrow?: boolean;
-  endArrow?: boolean;
-  arrowSize?: number;
-}
-
-/**
- * Connect elements with svg paths
- * @param el1 first element (HTML or React component)
- * @param el2 second element (HTML or React component)
- * @param shape s | line | narrow-s
- * @param direction (right, left, top, bottom) --> (right, left, top, bottom) if shape is narrow-s
- * @param grid number of columns in X/Y axis from the start point to the end point
- * @param stem min distance from the start point to the first transition
- * @param minStep radius of the transition curve, default is min of (deltaX/grid, deltaY/grid)
- * @param roundCorner true to have a curve transition
- * @param stroke color of the svg path
- * @param strokeWidth width of the svg path
- * @param startArrow true to have an arrow at the start point (not applicable for s shape)
- * @param endArrow true to have an arrow at the end point (not applicable for s shape)
- * @param arrowSize size of arrows
- */
-
-export default function SvgConnector(props: Props) {
+export default function SvgConnector({
+  el1,
+  el2,
+  connectorProps,
+}: SvgConnectorProps) {
   const wrapperRef = useRef<HTMLDivElement | null>(null);
 
-  function getCoords(el: HTMLElement) {
-    const parentEl = el.offsetParent;
-    const box = el.getBoundingClientRect();
-
-    return {
-      top: box.top + window.pageYOffset + (parentEl?.scrollTop || 0),
-      right: box.right + window.pageXOffset + (parentEl?.scrollLeft || 0),
-      bottom: box.bottom + window.pageYOffset + (parentEl?.scrollTop || 0),
-      left: box.left + window.pageXOffset + (parentEl?.scrollLeft || 0),
-    };
-  }
-
   function getNewCoordinates() {
-    const el1Coords = getCoords(props.el1);
-    const el2Coords = getCoords(props.el2);
+    const el1Coords = getCoords(el1);
+    const el2Coords = getCoords(el2);
 
     const el1Dimesion = {
       width: el1Coords.right - el1Coords.left,
@@ -100,22 +51,24 @@ export default function SvgConnector(props: Props) {
       y: el2Coords.top + el2Dimesion.height / 2,
     };
 
-    switch (props.direction) {
-      case "l2l":
+    switch (
+      connectorProps.shape === ShapeType.NarrowS &&
+      connectorProps.narrowSDirection
+    ) {
+      case ConnectorDirectionType.Left2Left:
         start.x = el1Coords.left;
         break;
-      case "l2r":
+      case ConnectorDirectionType.Left2Right:
         start.x = el1Coords.left;
         end.x = el2Coords.right;
         break;
-      case "r2r":
+      case ConnectorDirectionType.Right2Right:
         start.x = el1Coords.right;
         end.x = el2Coords.right;
         break;
-      case "b2t":
+      case ConnectorDirectionType.Bottom2Top:
         start = {
           x: el1Coords.left + el1Dimesion.width / 2,
-
           y: el1Coords.bottom,
         };
         end = {
@@ -123,7 +76,7 @@ export default function SvgConnector(props: Props) {
           y: el2Coords.top,
         };
         break;
-      case "b2b":
+      case ConnectorDirectionType.Bottom2Bottom:
         start = {
           x: el1Coords.left + el1Dimesion.width / 2,
           y: el1Coords.bottom,
@@ -133,7 +86,7 @@ export default function SvgConnector(props: Props) {
           y: el2Coords.bottom,
         };
         break;
-      case "t2t":
+      case ConnectorDirectionType.Top2Top:
         start = {
           x: el1Coords.left + el1Dimesion.width / 2,
           y: el1Coords.top,
@@ -143,7 +96,7 @@ export default function SvgConnector(props: Props) {
           y: el2Coords.top,
         };
         break;
-      case "t2b":
+      case ConnectorDirectionType.Top2Bottom:
         start = {
           x: el1Coords.left + el1Dimesion.width / 2,
           y: el1Coords.top,
@@ -160,7 +113,7 @@ export default function SvgConnector(props: Props) {
     return { start, end };
   }
 
-  if (!props.el1 || !props.el2) return null;
+  if (!el1 || !el2) return null;
 
   const coordinates = getNewCoordinates();
 
@@ -175,39 +128,25 @@ export default function SvgConnector(props: Props) {
         zIndex: -1,
       }}
     >
-      {props.shape === "line" && (
+      {connectorProps.shape === ShapeType.Line && (
         <LineConnector
-          {...props}
+          {...connectorProps}
           startPoint={coordinates.start}
           endPoint={coordinates.end}
-          startArrow={props.startArrow}
-          endArrow={props.endArrow}
-          arrowSize={props.arrowSize}
         />
       )}
-      {props.shape === "s" && (
+      {connectorProps.shape === ShapeType.S && (
         <SConnector
-          {...props}
+          {...connectorProps}
           startPoint={coordinates.start}
           endPoint={coordinates.end}
-          startArrow={props.startArrow}
-          endArrow={props.endArrow}
-          arrowSize={props.arrowSize}
         />
       )}
-      {props.shape === "narrow-s" && (
+      {connectorProps.shape === ShapeType.NarrowS && (
         <NarrowSConnector
-          {...props}
+          {...connectorProps}
           startPoint={coordinates.start}
           endPoint={coordinates.end}
-          stem={props.stem}
-          grids={props.grids}
-          roundCorner={props.roundCorner}
-          direction={props.direction}
-          minStep={props.minStep}
-          startArrow={props.startArrow}
-          endArrow={props.endArrow}
-          arrowSize={props.arrowSize}
         />
       )}
     </div>

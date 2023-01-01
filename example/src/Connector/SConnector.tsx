@@ -1,21 +1,13 @@
 import React from "react";
-import { ShapeConnectorProps } from "./SvgConnector";
+import { BaseShapeConnectorProps } from "./interfaces/Shape";
+import { DEFAULT_COLOR, ShapeType } from "./utils/Constants";
 
-interface SConectorProps extends ShapeConnectorProps {}
+export interface SConectorProps extends BaseShapeConnectorProps {
+  shape: ShapeType.S;
+}
 
-/**
- * S shape svg connector
- * @param startPoint
- * @param endPoint
- * @param stroke
- * @param strokeWidth
- * @param startArrow
- * @param endArrow
- * @param arrowSize
- */
 export default function SConnector(props: SConectorProps) {
   const {
-    direction,
     stroke,
     strokeWidth,
     startArrow,
@@ -26,8 +18,8 @@ export default function SConnector(props: SConectorProps) {
     ...rest
   } = props;
 
-  const distanceX = props.endPoint.x - props.startPoint.x;
-  const distanceY = props.endPoint.y - props.startPoint.y;
+  const distanceX = endPoint.x - startPoint.x;
+  const distanceY = endPoint.y - startPoint.y;
   const grids = 4;
   const stepX = distanceX / grids;
   const stepY = distanceY / grids;
@@ -37,7 +29,7 @@ export default function SConnector(props: SConectorProps) {
       <path
         {...rest}
         d={`M
-            ${props.startPoint.x} ${props.startPoint.y} 
+            ${startPoint.x} ${startPoint.y} 
             q 
             ${(stepX * grids) / 2} 0 
             ${(stepX * grids) / 2} ${(stepY * grids) / 2}
@@ -45,8 +37,8 @@ export default function SConnector(props: SConectorProps) {
             0 ${(stepY * grids) / 2} 
             ${(stepX * grids) / 2} ${(stepY * grids) / 2}
         `}
-        stroke={props.stroke || "orange"}
-        strokeWidth={props.strokeWidth || 3}
+        stroke={stroke || DEFAULT_COLOR}
+        strokeWidth={strokeWidth || 3}
         fill="transparent"
       />
     </svg>

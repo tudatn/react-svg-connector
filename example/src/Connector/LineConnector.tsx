@@ -1,23 +1,18 @@
 import React from "react";
 import Arrow from "./Arrow";
-import { ShapeConnectorProps } from "./SvgConnector";
+import { BaseShapeConnectorProps } from "./interfaces/Shape";
+import {
+  DEFAULT_COLOR,
+  DEFAULT_STROKE_WIDTH,
+  ShapeType,
+} from "./utils/Constants";
 
-interface LineConnectorProps extends ShapeConnectorProps {}
-
-/**
- * Line svg connector
- * @param startPoint
- * @param endPoint
- * @param stroke
- * @param strokeWidth
- * @param startArrow
- * @param endArrow
- * @param arrowSize
- */
+export interface LineConnectorProps extends BaseShapeConnectorProps {
+  shape: ShapeType.Line;
+}
 
 export default function LineConnector(props: LineConnectorProps) {
   const {
-    direction,
     stroke,
     strokeWidth,
     startArrow,
@@ -28,8 +23,8 @@ export default function LineConnector(props: LineConnectorProps) {
     ...rest
   } = props;
 
-  const deltaX = props.endPoint.x - props.startPoint.x;
-  const deltaY = props.endPoint.y - props.startPoint.y;
+  const deltaX = endPoint.x - startPoint.x;
+  const deltaY = endPoint.y - startPoint.y;
 
   const alpha = Math.atan(deltaY / deltaX);
 
@@ -40,34 +35,34 @@ export default function LineConnector(props: LineConnectorProps) {
   }
 
   const cArrowSize =
-    props.arrowSize || (props.strokeWidth ? props.strokeWidth * 3 : 10);
+    arrowSize || (strokeWidth ? strokeWidth * DEFAULT_STROKE_WIDTH : 10);
 
   return (
     <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
       <path
         {...rest}
         d={`M
-            ${props.startPoint.x} ${props.startPoint.y}
+            ${startPoint.x} ${startPoint.y}
             L
-            ${props.endPoint.x} ${props.endPoint.y}
+            ${endPoint.x} ${endPoint.y}
           `}
-        stroke={props.stroke || "orange"}
-        strokeWidth={props.strokeWidth || 3}
+        stroke={stroke || DEFAULT_COLOR}
+        strokeWidth={strokeWidth || DEFAULT_STROKE_WIDTH}
       />
-      {props.endArrow && (
+      {endArrow && (
         <Arrow
-          tip={props.endPoint}
+          tip={endPoint}
           size={cArrowSize}
           rotateAngle={rotateAngle}
-          stroke={props.stroke || "orange"}
+          stroke={stroke || DEFAULT_COLOR}
         />
       )}
-      {props.startArrow && (
+      {startArrow && (
         <Arrow
-          tip={props.startPoint}
+          tip={startPoint}
           size={cArrowSize}
           rotateAngle={rotateAngle + 180}
-          stroke={props.stroke || "orange"}
+          stroke={stroke || DEFAULT_COLOR}
         />
       )}
     </svg>

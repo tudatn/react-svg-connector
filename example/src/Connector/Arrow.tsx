@@ -1,36 +1,36 @@
 import React from "react";
-import { Point } from "./SvgConnector";
+import { Point } from "./interfaces/Point";
+import { DEFAULT_COLOR } from "./utils/Constants";
 
 export interface ArrowProps {
+  /** arrow tip point */
   tip: Point;
+  /** arrow size (stroke width) */
   size: number;
+  /** arrow filled color */
   stroke?: string;
+  /** rarrow rotation angle */
   rotateAngle?: number;
 }
 
-/**
- * Return an arrow path for svg
- * @param tip arrow tip point
- * @param size arrow size
- * @param stroke arrow filled color
- * @param rotateAngle arrow rotation angle, default = 0
- */
-
-export default function Arrow(props: ArrowProps) {
+export default function Arrow({
+  tip,
+  size,
+  stroke = DEFAULT_COLOR,
+  rotateAngle = 0,
+}: ArrowProps) {
   const path = `M
-                  ${props.tip.x} ${props.tip.y}
-                  l ${-props.size} ${-props.size / 2}
-                  v ${props.size}
+                  ${tip.x} ${tip.y}
+                  l ${-size} ${-size / 2}
+                  v ${size}
                   z
                 `;
   return (
     <path
       d={path}
-      fill={props.stroke}
-      stroke={props.stroke}
-      transform={`rotate(${props.rotateAngle || 0} ${props.tip.x} ${
-        props.tip.y
-      })`}
+      fill={stroke}
+      stroke={stroke}
+      transform={`rotate(${rotateAngle || 0} ${tip.x} ${tip.y})`}
     />
   );
 }

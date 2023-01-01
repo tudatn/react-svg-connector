@@ -1,68 +1,68 @@
 import React from "react";
 import Arrow from "./Arrow";
+import { BaseShapeConnectorProps } from "./interfaces/Shape";
+import {
+  ConnectorDirectionType,
+  DEFAULT_COLOR,
+  ShapeType,
+} from "./utils/Constants";
+import { isYSpaceDirections } from "./utils/SpaceDirection";
 
-import { ShapeConnectorProps, ShapeDirection } from "./SvgConnector";
-
-interface NarrowSConnectorProps extends ShapeConnectorProps {
+export interface NarrowSConnectorProps extends BaseShapeConnectorProps {
+  shape: ShapeType.NarrowS;
+  /** number of columns in X/Y axis */
   grids?: number;
+  /** min distance from the start point to the first transition */
   stem?: number;
+  /** true to have a curve transition */
   roundCorner?: boolean;
-  direction?: ShapeDirection;
+  /** (right, left, top, bottom) --> (right, left, top, bottom) */
+  narrowSDirection?: ConnectorDirectionType;
+  /** radius of the transition curve, default is min of (deltaX/grid, deltaY/grid) */
   minStep?: number;
-  arrowSize?: number;
-  endArrow?: boolean;
-  startArrow?: boolean;
+  /** distance from the start point to the first transition */
+  startStem?: number;
+  /** distance from the last transition to the end point */
+  endStem?: number;
 }
 
-/**
- * Custom S shape svg connector
- * @param startPoint
- * @param endPoint
- * @param grids number of columns in X/Y axis
- * @param stem min distance from the start point to the first transition
- * @param roundCorner true to have a curve transition
- * @param direction (right, left, top, bottom) --> (right, left, top, bottom)
- * @param minStep radius of the transition curve, default is min of (deltaX/grid, deltaY/grid)
- * @param arrowSize
- * @param endArrow
- * @param startArrow
- */
-
-export default function NarrowSConnector(props: NarrowSConnectorProps) {
-  const {
-    direction,
-    stroke,
-    strokeWidth,
-    startArrow,
-    endArrow,
-    startPoint,
-    endPoint,
-    arrowSize,
-    roundCorner,
-    minStep,
-    ...rest
-  } = props;
-
+export default function NarrowSConnector({
+  narrowSDirection,
+  stroke,
+  strokeWidth,
+  startArrow,
+  endArrow,
+  startPoint,
+  endPoint,
+  arrowSize,
+  roundCorner = true,
+  minStep,
+  startStem,
+  endStem,
+  stem = 0,
+  grids = 5,
+  ...rest
+}: NarrowSConnectorProps) {
   let coordinates = {
-    start: props.startPoint,
-    end: props.endPoint,
+    start: startPoint,
+    end: endPoint,
   };
 
-  if (props.direction === "l2r" || props.direction === "t2b") {
+  if (
+    narrowSDirection === ConnectorDirectionType.Left2Right ||
+    narrowSDirection === ConnectorDirectionType.Top2Bottom
+  ) {
     // swap elements
     coordinates = {
-      start: props.endPoint,
-      end: props.startPoint,
+      start: endPoint,
+      end: startPoint,
     };
   }
 
   const distanceX = coordinates.end.x - coordinates.start.x;
   const distanceY = coordinates.end.y - coordinates.start.y;
 
-  let stem = props.stem || 0;
-  const grids = props.grids || 5;
-
-  const radius = props.roundCorner ? 1 : 0;
+  const radius = roundCorner ? 1 : 0;
 
   const stepX = distanceX / grids;
   const stepY = distanceY / grids;
@@ -73,14 +73,13 @@ export default function NarrowSConnector(props: NarrowSConnectorProps) {
 
   let step = Math.min(Math.abs(stepX), Math.abs(stepY));
 
-  step = Math.min(step, props.minStep || step);
+  step = Math.min(step, minStep || step);
 
-  const cArrowSize =
-    props.arrowSize || (props.strokeWidth ? props.strokeWidth * 3 : 10);
+  const cArrowSize = arrowSize || (strokeWidth ? strokeWidth * 3 : 10);
 
-  function corner12(direction?: ShapeDirection) {
+  function corner12(direction?: ConnectorDirectionType) {
     const factor = distanceX * distanceY >= 0 ? 1 : -1;
-    const l2lFactor = props.direction === "l2l" ? -1 : 1;
+    const l2lFactor = direction === ConnectorDirectionType.Left2Left ? -1 : 1;
 
     const pathr2l = `M
                     ${coordinates.start.x} ${coordinates.start.y} 
@@ -107,11 +106,8 @@ export default function NarrowSConnector(props: NarrowSConnectorProps) {
     let path = pathr2l; // default
 
     switch (direction) {
-      case "r2r":
+      case ConnectorDirectionType.Right2Right:
         path = pathr2r;
-        break;
-      case "b2t":
-        path = pathr2l;
         break;
       default:
         break;
@@ -121,33 +117,37 @@ export default function NarrowSConnector(props: NarrowSConnectorProps) {
         <path
           {...rest}
           d={path}
-          stroke={props.stroke || "orange"}
-          strokeWidth={props.strokeWidth || 3}
+          stroke={stroke || DEFAULT_COLOR}
+          strokeWidth={strokeWidth || 3}
           fill="transparent"
         />
-        {props.endArrow && (
+        {endArrow && (
           <Arrow
             tip={coordinates.end}
             size={cArrowSize}
-            rotateAngle={props.direction === "r2r" ? 180 : 0}
-            stroke={props.stroke || "orange"}
+            rotateAngle={
+              direction === ConnectorDirectionType.Right2Right ? 180 : 0
+            }
+            stroke={stroke || DEFAULT_COLOR}
           />
         )}
-        {props.startArrow && (
+        {startArrow && (
           <Arrow
             tip={coordinates.start}
             size={cArrowSize}
-            rotateAngle={props.direction === "l2l" ? 0 : 180}
-            stroke={props.stroke || "orange"}
+            rotateAngle={
+              direction === ConnectorDirectionType.Left2Left ? 0 : 180
+            }
+            stroke={stroke || DEFAULT_COLOR}
           />
         )}
       </svg>
     );
   }
 
-  function corner21(direction?: ShapeDirection) {
+  function corner21(direction?: ConnectorDirectionType) {
     const factor = distanceX * distanceY >= 0 ? 1 : -1;
-    const t2tFactor = props.direction === "t2t" ? -1 : 1;
+    const t2tFactor = direction === ConnectorDirectionType.Top2Top ? -1 : 1;
 
     const pathb2t = `M
                     ${coordinates.start.x} ${coordinates.start.y} 
@@ -174,7 +174,7 @@ export default function NarrowSConnector(props: NarrowSConnectorProps) {
     let path = pathb2t; // default
 
     switch (direction) {
-      case "b2b":
+      case ConnectorDirectionType.Bottom2Bottom:
         path = pathb2b;
         break;
       default:
@@ -185,31 +185,35 @@ export default function NarrowSConnector(props: NarrowSConnectorProps) {
         <path
           {...rest}
           d={path}
-          stroke={props.stroke || "orange"}
-          strokeWidth={props.strokeWidth || 3}
+          stroke={stroke || DEFAULT_COLOR}
+          strokeWidth={strokeWidth || 3}
           fill="transparent"
         />
-        {props.endArrow && (
+        {endArrow && (
           <Arrow
             tip={coordinates.end}
             size={cArrowSize}
-            rotateAngle={props.direction === "b2b" ? 270 : 90}
-            stroke={props.stroke || "orange"}
+            rotateAngle={
+              direction === ConnectorDirectionType.Bottom2Bottom ? 270 : 90
+            }
+            stroke={stroke || DEFAULT_COLOR}
           />
         )}
-        {props.startArrow && (
+        {startArrow && (
           <Arrow
             tip={coordinates.start}
             size={cArrowSize}
-            rotateAngle={props.direction === "t2t" ? 90 : 270}
-            stroke={props.stroke || "orange"}
+            rotateAngle={
+              direction === ConnectorDirectionType.Top2Top ? 90 : 270
+            }
+            stroke={stroke || DEFAULT_COLOR}
           />
         )}
       </svg>
     );
   }
 
-  function corner34(direction?: ShapeDirection) {
+  function corner34(direction?: ConnectorDirectionType) {
     const factor = distanceX * distanceY > 0 ? 1 : -1;
 
     let pathr2l = `M
@@ -254,10 +258,10 @@ export default function NarrowSConnector(props: NarrowSConnectorProps) {
     let path = pathr2l; // default
 
     switch (direction) {
-      case "l2l":
+      case ConnectorDirectionType.Left2Left:
         path = pathl2l;
         break;
-      case "r2r":
+      case ConnectorDirectionType.Right2Right:
         path = pathr2r;
         break;
       default:
@@ -268,31 +272,35 @@ export default function NarrowSConnector(props: NarrowSConnectorProps) {
         <path
           {...rest}
           d={path}
-          stroke={props.stroke || "orange"}
-          strokeWidth={props.strokeWidth || 3}
+          stroke={stroke || DEFAULT_COLOR}
+          strokeWidth={strokeWidth || 3}
           fill="transparent"
         />
-        {props.endArrow && (
+        {endArrow && (
           <Arrow
             tip={coordinates.end}
             size={cArrowSize}
-            rotateAngle={props.direction === "r2r" ? 180 : 0}
-            stroke={props.stroke || "orange"}
+            rotateAngle={
+              direction === ConnectorDirectionType.Right2Right ? 180 : 0
+            }
+            stroke={stroke || DEFAULT_COLOR}
           />
         )}
-        {props.startArrow && (
+        {startArrow && (
           <Arrow
             tip={coordinates.start}
             size={cArrowSize}
-            rotateAngle={props.direction === "l2l" ? 0 : 180}
-            stroke={props.stroke || "orange"}
+            rotateAngle={
+              direction === ConnectorDirectionType.Left2Left ? 0 : 180
+            }
+            stroke={stroke || DEFAULT_COLOR}
           />
         )}
       </svg>
     );
   }
 
-  function corner43(direction?: ShapeDirection) {
+  function corner43(direction?: ConnectorDirectionType) {
     const factor = distanceX * distanceY > 0 ? 1 : -1;
 
     let pathb2t = `M
@@ -337,10 +345,10 @@ export default function NarrowSConnector(props: NarrowSConnectorProps) {
     let path = pathb2t; // default
 
     switch (direction) {
-      case "b2b":
+      case ConnectorDirectionType.Bottom2Bottom:
         path = pathb2b;
         break;
-      case "t2t":
+      case ConnectorDirectionType.Top2Top:
         path = patht2t;
         break;
       default:
@@ -351,46 +359,49 @@ export default function NarrowSConnector(props: NarrowSConnectorProps) {
         <path
           {...rest}
           d={path}
-          stroke={props.stroke || "orange"}
-          strokeWidth={props.strokeWidth || 3}
+          stroke={stroke || DEFAULT_COLOR}
+          strokeWidth={strokeWidth || 3}
           fill="transparent"
         />
-        {props.endArrow && (
+        {endArrow && (
           <Arrow
             tip={coordinates.end}
             size={cArrowSize}
-            rotateAngle={props.direction === "b2b" ? 270 : 90}
-            stroke={props.stroke || "orange"}
+            rotateAngle={
+              direction === ConnectorDirectionType.Bottom2Bottom ? 270 : 90
+            }
+            stroke={stroke || DEFAULT_COLOR}
           />
         )}
-        {props.startArrow && (
+        {startArrow && (
           <Arrow
             tip={coordinates.start}
             size={cArrowSize}
-            rotateAngle={props.direction === "t2t" ? 90 : 270}
-            stroke={props.stroke || "orange"}
+            rotateAngle={
+              direction === ConnectorDirectionType.Top2Top ? 90 : 270
+            }
+            stroke={stroke || DEFAULT_COLOR}
           />
         )}
       </svg>
     );
   }
 
-  const ySpaceDirections = ["b2t", "b2b", "t2t", "t2b"];
-  if (ySpaceDirections.includes(props.direction || "")) {
+  if (narrowSDirection && isYSpaceDirections(narrowSDirection)) {
     if (distanceY >= 0) {
-      return corner21(props.direction);
+      return corner21(narrowSDirection);
     } else {
-      return corner43(props.direction);
+      return corner43(narrowSDirection);
     }
   }
 
   // corner 1 & 2
   if (distanceX >= 0) {
-    return corner12(props.direction);
+    return corner12(narrowSDirection);
   }
 
   // corner 4 & 3
   else {
-    return corner34(props.direction);
+    return corner34(narrowSDirection);
   }
 }
